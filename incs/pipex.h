@@ -10,4 +10,9 @@
 #include "ft_printf.h"
 #include "libft.h"
 
+char		**parse_arguments(char *str, char *target, char *command);
+char		*trim_command(char *str);
+char		*find_path(char *path, char *arg);
+int			isnt_path(char *str);
+
 #endif

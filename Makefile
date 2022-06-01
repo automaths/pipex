@@ -1,4 +1,4 @@
-SRCS			=	./srcs/pipex.c
+SRCS			=	./srcs/pipex.c ./srcs/paths.c
 
 OBJS			= 	$(SRCS:.c=.o)
 
