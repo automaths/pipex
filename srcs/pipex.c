@@ -25,11 +25,21 @@ char *find_path(char *path, char *arg)
 
 int	main(int argc, char **argv, char **envp)
 {
+	char *argz1[4];
+	char *argz2[3];
 	int count;
 	char buffer[4096];
 	int fd[2];
 	int pid1;
+	int pid2;
 
+	(void)argz1;
+	(void)argz2;
+	(void)count;
+	(void)buffer;
+	(void)fd;
+	(void)pid1;
+	(void)pid2;
 	(void)argc;
 	(void)argv;
 	(void)envp;
@@ -53,15 +63,14 @@ int	main(int argc, char **argv, char **envp)
 		path = find_path(paths[i], argv[2]);
 	else
 		return (ft_printf("display error"), 0);
-	ft_printf("this is the path %s\n", path);
+	// ft_printf("this is the path %s\n", path);
 	
 	if (pipe(fd) == -1)
 		return (0);
 	
-	char *argz[3];
-	argz[0] = path;
-	argz[1] = argv[1];
-	argz[2] = NULL;
+	argz1[0] = path;
+	argz1[1] = argv[1];
+	argz1[2] = NULL;
 	
 	pid1 = fork();
 	if (pid1 == -1)
@@ -71,12 +80,34 @@ int	main(int argc, char **argv, char **envp)
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[0]);
 		close(fd[1]);
-		execve(path, argz, envp);
+		execve(path, argz1, envp);
 	}
 	
-	count = read(fd[0], buffer, 4096);
-	buffer[count] = '\0';
-	ft_printf("%s", buffer);
+		// count = read(fd[0], buffer, 4096);
+		// buffer[count] = '\0';
+		// ft_printf("%s", buffer);
+	
+	i = 0;
+	while (paths[i] && !find_path(paths[i], argv[3]))
+		i++;
+	if (paths[i])
+		path = find_path(paths[i], argv[3]);
+	else
+		return (ft_printf("display error"), 0);
+	// ft_printf("this is the path %s\n", path);
+	
+	pid2 = fork();
+	if (pid2 == -1)
+		return (0);
+	if (pid2 == 0)
+	{
+		count = read(fd[0], buffer, 4096);
+		buffer[count] = '\0';
+		argz2[0] = path;
+		argz2[1] = buffer;
+		argz2[2] = NULL;
+		execve(path, argz2, envp);
+	}
 
 	return (0);
 }
