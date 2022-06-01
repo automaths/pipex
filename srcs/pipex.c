@@ -23,43 +23,6 @@ char *find_path(char *path, char *arg)
 	return (NULL);
 }
 
-char **parse_arguments(char *str, char *target)
-{
-	char **tmp;
-	char **argz;
-	int i;
-	int j;
-	
-	tmp = ft_split(str, ' ');
-	// i = 0;
-	// while (tmp[i])
-	// {
-	// 	ft_printf("%s\n", tmp[i]);
-	// 	i++;
-	// }
-	i = 0;
-	while (tmp[i])
-		i++;
-	argz = (char **)malloc(sizeof(char *) * (i + 3));
-	if (argz == NULL)
-		return (NULL);
-	argz[0] = "wejdene";
-	argz[i + 2] = NULL;
-	j = 1;
-	while (j <= i)
-	{
-		argz[j] = tmp[j - 1];
-		j++;
-	}
-	argz[j] = target;
-	// i = 0;
-	// while (argz[i])
-	// {
-	// 	ft_printf("%s\n", argz[i]);
-	// 	i++;
-	// }
-	return (argz);
-}
 
 char *trim_command(char *str)
 {
@@ -86,6 +49,44 @@ char *trim_command(char *str)
 		j++;
 	}
 	return (command);
+}
+
+char **parse_arguments(char *str, char *target)
+{
+	char **tmp;
+	char **argz;
+	int i;
+	int j;
+	
+	tmp = ft_split(str, ' ');
+	i = 0;
+	while (tmp[i])
+	{
+		ft_printf("%s\n", tmp[i]);
+		i++;
+	}
+	i = 0;
+	while (tmp[i])
+		i++;
+	argz = (char **)malloc(sizeof(char *) * (i + 3));
+	if (argz == NULL)
+		return (NULL);
+	argz[0] = "wejdene";
+	argz[i + 2] = NULL;
+	j = 1;
+	while (j <= i)
+	{
+		argz[j] = tmp[j - 1];
+		j++;
+	}
+	argz[j] = target;
+	// i = 0;
+	// while (argz[i])
+	// {
+	// 	ft_printf("%s\n", argz[i]);
+	// 	i++;
+	// }
+	return (argz);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -135,8 +136,8 @@ int	main(int argc, char **argv, char **envp)
 	if (pipe(fd) == -1)
 		return (0);
 
-	argz1 = parse_arguments(argv[2], argv[1]);
 	
+	argz1 = parse_arguments(argv[2], argv[1]);
 	// argz1[0] = path;
 	// argz1[1] = "-e";
 	// argz1[2] = argv[1];
