@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 22:47:36 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/01 04:45:32 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/02 02:13:19 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,6 @@
 # define FT_PRINTF_H
 
 /*
-	WHAT WE GLOBALLY NEED TO EXEC AND CAN BE STRUCTURED IN THE MAIN FUNCTION:
-	char	*path;			is the path after going through the pathfinder.c.
-	char	**cmd;			is the array containing the command and arguments after going through the cmdbuilder.
-	char	**env;			the env variable.
-	int	*fds;			is the array containing the INFILE and OUTFILE fds after going through the fdsbuilder.
-	if you check that those parameters are valid before properly starting anything, you will barely have to worry about fd closing
-	and variables that must be freed.
 	LEAKS HANDLING:
 	[x] free **env/paths= after building your 2nd command.
 	[x] free every path you try to build if they fail.

@@ -1,10 +1,28 @@
 #include "pipex.h"
 
-int	isnt_path(char *str)
+int	get_the_path(t_struct *data)
 {
-	if (str[0] == 'P' && str[1] == 'A' && str[2] == 'T' && str[3] == 'H' && str[4] == '=')
-		return (0);
-	return (1);
+	int i;
+	char *str;
+	
+	if (data->order == 0)
+		str = data->argv[2];
+	if (data->order == 1)
+		str = data->argv[3];
+	i = 0;
+	while (ft_strncmp(data->envp[i], "PATH=", 5) != 0)
+		i++;
+	data->unix_paths = ft_split(&data->envp[i][4], ':');
+	i = 0;
+	data->command = trim_command(str);
+	while (data->unix_paths[i] && !find_path(data->unix_paths[i], data->command))
+		i++;
+	if (data->unix_paths[i])
+	{
+		data->path = find_path(data->unix_paths[i], data->command);
+		return (1);
+	}
+	return (0);
 }
 
 char *find_path(char *path, char *arg)
@@ -48,30 +66,4 @@ char *trim_command(char *str)
 		j++;
 	}
 	return (command);
-}
-
-char **parse_arguments(char *str, char *target, char *command)
-{
-	char **tmp;
-	char **argz;
-	int i;
-	int j;
-	
-	tmp = ft_split(str, ' ');
-	i = 0;
-	while (tmp[i])
-		i++;
-	argz = (char **)malloc(sizeof(char *) * (i + 4));
-	if (argz == NULL)
-		return (NULL);
-	argz[0] = command;
-	j = 1;
-	while (j <= i)
-	{
-		argz[j] = tmp[j];
-		j++;
-	}
-	argz[j - 1] = target;
-	argz[j] = NULL;
-	return (argz);
 }

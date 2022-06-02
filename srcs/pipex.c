@@ -1,80 +1,121 @@
 #include "pipex.h"
 
+char **parse_arguments(t_struct *data)
+{
+	char **tmp;
+	char **argz;
+	int i;
+	int j;
+	
+	if (data->order == 0)
+		tmp = ft_split(data->argv[2], ' ');
+	if (data->order == 1)
+		tmp = ft_split(data->argv[3], ' ');
+	i = 0;
+	while (tmp[i])
+		i++;
+	argz = (char **)malloc(sizeof(char *) * (i + 4));
+	if (argz == NULL)
+		return (NULL);
+	argz[0] = data->command;
+	j = 1;
+	while (j <= i)
+	{
+		argz[j] = tmp[j];
+		j++;
+	}
+	if (data->order == 0)
+		argz[j - 1] = data->argv[1];
+	if (data->order == 1)
+		argz[j - 1] = "infile.txt";
+		// argz[j - 1] = data->buffer;
+	data->order++;
+	argz[j] = NULL;
+	return (argz);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	char **argz1;
-	char *argz2[3];
-	int count;
-	char buffer[4096];
-	int fd[2];
-	int pid1;
-	int pid2;
 	int i;
-	char *path;
-	char *command;
-	char **paths;
+	t_struct data;
 
 	(void)argc;
 	
-	i = 0;
-	while (isnt_path(envp[i]))
-		i++;
-	path = envp[i];
-	i = 0;
-	while (i++ < 5)
-		path++;
-	paths = ft_split(path, ':');
-	i = 0;
-	command = trim_command(argv[2]);
-	while (paths[i] && !find_path(paths[i], command))
-		i++;
-	if (paths[i])
-		path = find_path(paths[i], command);
-	else
-		return (ft_printf("display error"), 0);
-	// ft_printf("this is the path %s\n", path);
 	
-	if (pipe(fd) == -1)
+	data.envp = envp;
+	data.argv = argv;
+	data.order = 0;
+	
+	if (pipe(data.fd) == -1)
 		return (0);
+		
+		
+	if (get_the_path(&data) == 0)
+		return (ft_printf("there is an error"), 0);
 
-	argz1 = parse_arguments(argv[2], argv[1], command);
-	
-	pid1 = fork();
-	if (pid1 == -1)
-		return (0);
-	if (pid1 == 0)
-	{
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[0]);
-		close(fd[1]);
-		execve(path, argz1, envp);
-	}
-	
-	// 	// count = read(fd[0], buffer, 4096);
-	// 	// buffer[count] = '\0';
-	// 	// ft_printf("%s", buffer);
-	
+	data.argz1 = parse_arguments(&data);
+
 	i = 0;
-	while (paths[i] && !find_path(paths[i], argv[3]))
-		i++;
-	if (paths[i])
-		path = find_path(paths[i], argv[3]);
-	else
-		return (ft_printf("display error"), 0);
-	// ft_printf("this is the path %s\n", path);
-	
-	pid2 = fork();
-	if (pid2 == -1)
-		return (0);
-	if (pid2 == 0)
+	while (data.argz1[i])
 	{
-		count = read(fd[0], buffer, 4096);
-		buffer[count] = '\0';
-		argz2[0] = path;
-		argz2[1] = buffer;
-		argz2[2] = NULL;
-		execve(path, argz2, envp);
+		ft_printf("%s\n", data.argz1[i]);
+		i++;
 	}
+	
+	data.pid1 = fork();
+	waitpid(data.pid1, 0, 0);
+	if (data.pid1 == -1)
+		return (0);
+	if (data.pid1 == 0)
+	{
+		dup2(data.fd[1], STDOUT_FILENO);
+		close(data.fd[0]);
+		close(data.fd[1]);
+		execve(data.path, data.argz1, envp);
+	}
+	
+	if (get_the_path(&data) == 0)
+		return (ft_printf("there is an error"), 0);
+	
+	//OUVRIR UN DEUXIEME PIPE
+	
+	data.pid2 = fork();
+	waitpid(data.pid2, 0, 0);
+	if (data.pid2 == -1)
+		return (0);
+	if (data.pid2 == 0)
+	{
+		// data.buffer = (char *)malloc(sizeof(char) * 4096);
+		// if (data.buffer == NULL)
+		// 	return (0);
+		// data.count = read(data.fd[0], data.buffer, 4096);
+		// data.buffer[data.count] = '\0';
+		
+		data.argz2 = parse_arguments(&data);
+		i = 0;
+		ft_printf("\n\n\n");
+		while (data.argz2[i])
+		{
+			ft_printf("%s\n", data.argz2[i]);
+			i++;
+		}
+		dup2(data.fd[1], STDOUT_FILENO);
+		close(data.fd[0]);
+		close(data.fd[1]);
+		execve(data.path, data.argz2, envp);
+	}
+		data.buffer = (char *)malloc(sizeof(char) * 4096);
+		if (data.buffer == NULL)
+			return (0);
+		data.count = read(data.fd[0], data.buffer, 4096);
+		data.buffer[data.count] = '\0';
+		ft_printf("\n\n%d\n\n", data.count);
+		ft_printf("\n\nbloup%s\n\n", data.buffer);
+		int fd;
+		fd = open("testone.txt", O_RDWR);
+		write(fd, data.buffer, data.count);
+	
+	
 
 	return (0);
 }
