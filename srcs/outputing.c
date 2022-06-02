@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 07:17:41 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/02 07:41:06 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/02 08:00:07 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	write_output(t_struct *data)
 		return (0);
 	write(fd, data->buffer, data->count);
 	close(fd);
-	free(data->buffer);
+	if (data->buffer)
+		free(data->buffer);
 	return (1);
 }
