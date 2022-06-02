@@ -27,7 +27,7 @@ char **parse_arguments(t_struct *data)
 	if (data->order == 0)
 		argz[j - 1] = data->argv[1];
 	if (data->order == 1)
-		argz[j - 1] = "infile.txt";
+		argz[j - 1] = data->argv[4];
 		// argz[j - 1] = data->buffer;
 	data->order++;
 	argz[j] = NULL;
@@ -78,6 +78,19 @@ int	main(int argc, char **argv, char **envp)
 		return (ft_printf("there is an error"), 0);
 	
 	//OUVRIR UN DEUXIEME PIPE
+		data.buffer = (char *)malloc(sizeof(char) * 4096);
+		if (data.buffer == NULL)
+			return (0);
+		data.count = read(data.fd[0], data.buffer, 4096);
+		data.buffer[data.count] = '\0';	
+		
+		ft_printf("\nFIRST\n\n number char to be written : %d\n", data.count);
+		ft_printf("to be written :\n%s\n\n", data.buffer);
+		int fd;
+		fd = open(data.argv[4], O_RDWR);
+		write(fd, data.buffer, data.count);
+		close(fd);
+	
 	
 	data.pid2 = fork();
 	waitpid(data.pid2, 0, 0);
@@ -104,18 +117,23 @@ int	main(int argc, char **argv, char **envp)
 		close(data.fd[1]);
 		execve(data.path, data.argz2, envp);
 	}
+	
+	
+	
+	
+	
+	
 		data.buffer = (char *)malloc(sizeof(char) * 4096);
 		if (data.buffer == NULL)
 			return (0);
 		data.count = read(data.fd[0], data.buffer, 4096);
-		data.buffer[data.count] = '\0';
-		ft_printf("\n\n%d\n\n", data.count);
-		ft_printf("\n\nbloup%s\n\n", data.buffer);
-		int fd;
-		fd = open("testone.txt", O_RDWR);
+		data.buffer[data.count] = '\0';	
+		
+		ft_printf("\nSECOND\n\nnumber char to be written : %d\n", data.count);
+		ft_printf("to be written :\n%s\n\n", data.buffer);
+		// int fd;
+		fd = open(data.argv[4], O_RDWR | O_TRUNC);
 		write(fd, data.buffer, data.count);
-	
-	
-
+		close(fd);
 	return (0);
 }
