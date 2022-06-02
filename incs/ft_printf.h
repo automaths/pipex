@@ -6,52 +6,54 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 22:47:36 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/02 02:13:19 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/02 07:58:03 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-/*
-	LEAKS HANDLING:
-	[x] free **env/paths= after building your 2nd command.
-	[x] free every path you try to build if they fail.
-	[x] be sure to close any unused fd before launching execve.
-	[x] close any open fd if anything fails and stops the process.
-	[x] you need to free the struct's elements at the potential end of the process if anything goes wrong.
-	WHICH VAR. WILL BE INSTANTIATED IN THE EXECUTIVE FUNCTION:
-	int	pid;			will contain the pid.
-	int	*fds[2];		is the array containing the pipes entry & exit.
-	int	status;			will contain the status of waitpid().
-	IF THE TIME LEFT ALLOWS IT, WHAT I MAY NEED IN THE STRUCTURE TO HANDLE ERROR CASES:
-	int	errno;
-	SPECIFIC CASE TO HANDLE:
-	[x]	any command | ls:		only executes ls.
-	[0]	echo "hello world" -n:		prints "hello world" -n. (YOU DON'T HAVE TO HANDLE THIS CASE TO SUCCESS)
-	[0]	grep "o" -c:			prints the result and use the flag. (YOU DON'T HAVE TO HANDLE THIS CASE TO SUCCESS)
-						WHY ? First, because Pipex is not about parsing. As long as you understand how pipes,
-						fork and fd manipulation work, you should be good. You can also argue that your commands
-						are typed inside quotes, and that those cases will mess with how many arguments your
-						program will process.
-	[x]					if infile can't be open (doesn't exist or you don't have the right permission), you need
-						to execute 2nd command nonetheless.
-	[x]					if outfile can't be open (wrong permission), you need to execute 1st command nonetheless.
-						It won't necessarily shows in the outfile, but it can be checked with commands like ls.
-	[x]					handle empty cmd.
-	[x]					you need to check if the **env parameter exists.
-	[x]					you need to check if you can actually find the line PATH= in the env parameter.
-						This will ensure your program won't segfault if you unset PATH in the shell before
-						running Pipex.
-	[x]					handle wrong first cmd.
-	[x]					handle wrong second cmd.
-	check leaks on linux with:
-	valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --tracks-fds=yes ./pipex -
-*/
-
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdarg.h>
+
+/*
+UNIX COMMANDS : ls -la, wc -c -m -l -w, grep
+
+LEAKS HANDLING:
+[x] free **env/paths= after building your 2nd command.
+[x] free every path you try to build if they fail.
+[x] be sure to close any unused fd before launching execve.
+[x] close any open fd if anything fails and stops the process.
+[x] you need to free the struct's elements at the potential end of the process if anything goes wrong.
+WHICH VAR. WILL BE INSTANTIATED IN THE EXECUTIVE FUNCTION:
+int	pid;			will contain the pid.
+int	*fds[2];		is the array containing the pipes entry & exit.
+int	status;			will contain the status of waitpid().
+IF THE TIME LEFT ALLOWS IT, WHAT I MAY NEED IN THE STRUCTURE TO HANDLE ERROR CASES:
+int	errno;
+SPECIFIC CASE TO HANDLE:
+[x]	any command | ls:		only executes ls.
+[0]	echo "hello world" -n:		prints "hello world" -n. (YOU DON'T HAVE TO HANDLE THIS CASE TO SUCCESS)
+[0]	grep "o" -c:			prints the result and use the flag. (YOU DON'T HAVE TO HANDLE THIS CASE TO SUCCESS)
+					WHY ? First, because Pipex is not about parsing. As long as you understand how pipes,
+					fork and fd manipulation work, you should be good. You can also argue that your commands
+					are typed inside quotes, and that those cases will mess with how many arguments your
+					program will process.
+[x]					if infile can't be open (doesn't exist or you don't have the right permission), you need
+					to execute 2nd command nonetheless.
+[x]					if outfile can't be open (wrong permission), you need to execute 1st command nonetheless.
+					It won't necessarily shows in the outfile, but it can be checked with commands like ls.
+[x]					handle empty cmd.
+[x]					you need to check if the **env parameter exists.
+[x]					you need to check if you can actually find the line PATH= in the env parameter.
+					This will ensure your program won't segfault if you unset PATH in the shell before
+					running Pipex.
+[x]					handle wrong first cmd.
+[x]					handle wrong second cmd.
+check leaks on linux with:
+valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --tracks-fds=yes ./pipex -
+*/
 
 void				ft_putchar(char c);
 int					ft_atoi(char *str);
