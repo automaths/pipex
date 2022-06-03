@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 07:17:37 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/02 07:29:49 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/03 02:46:55 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ char	**parse_arguments(t_struct *data)
 	i = 0;
 	while (tmp[i])
 		i++;
-	argz = (char **)malloc(sizeof(char *) * (i + 4));
+	argz = (char **)malloc(sizeof(char *) * (i + 3));
 	if (argz == NULL)
 		return (NULL);
 	argz[0] = data->command;
@@ -105,10 +105,6 @@ char	**parse_arguments(t_struct *data)
 		argz[j] = tmp[j];
 		j++;
 	}
-	if (data->order == 0)
-		argz[j - 1] = data->argv[1];
-	if (data->order == 1)
-		argz[j - 1] = data->argv[4];
 	data->order++;
 	argz[j] = NULL;
 	return (argz);

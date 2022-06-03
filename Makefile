@@ -1,4 +1,4 @@
-SRCS			=	./srcs/pipexing.c ./srcs/pathing.c ./srcs/forking.c ./srcs/initing.c ./srcs/outputing.c ./srcs/processing.c
+SRCS			=	./srcs/pipexing.c ./srcs/parsing.c ./srcs/initing.c
 
 OBJS			= 	$(SRCS:.c=.o)
 

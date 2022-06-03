@@ -1,30 +1,19 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pipexing.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/02 07:17:32 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/02 07:57:57 by nsartral         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include  "pipex.h"
 
-#include "pipex.h"
+int	pipexing(t_struct *data)
+{
+	;
+}
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_struct	data;
-
-	(void)argc;
+	t_struct data;
+	if (argc != 5)
+		return (ft_printf("wrong arguments"), 0);
+	if (envp[0] == NULL)
+		return (ft_printf("no environment"), 0);
 	struct_init(&data, argv, envp);
-	if (pipe(data.fd) == -1)
-		return (0);
-	if (processing_one(&data) == 0)
-		return (0);
-	freeing(&data);
-	if (processing_two(&data) == 0)
-		return (0);
-	freeing(&data);
+	if (pipexing(&data) == 0)
+		return(freeing(&data), ft_printf("something went wrong", 0));
 	return (0);
 }
