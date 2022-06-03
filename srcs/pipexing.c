@@ -3,6 +3,7 @@
 int	pipexing(t_struct *data)
 {
 	;
+	
 }
 
 int	main(int argc, char **argv, char **envp)
