@@ -15,6 +15,15 @@ int	struct_init(t_struct *data, int argc, char **argv, char **envp)
 	while (argv[data->current_argv])
 		data->current_argv++;
 	data->argz_num = data->current_argv;
+	
+	
+	data->pid = (int *)malloc(sizeof(int) * data->argc);
+	data->fd = (int **)malloc(sizeof(int *) * data->argc);
+	int i;
+	i = -1;
+	while (++i < argc)
+		data->fd[i] = (int *)malloc(sizeof(int) * 5);
+	ft_printf("%d", i);
 	return (1);
 }
 

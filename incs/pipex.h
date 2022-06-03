@@ -19,10 +19,8 @@ typedef struct s_struct
 	char	**argz;
 	int		argz_num;
 	char	*buffer;
-	int		pid;
-	int		pid2;
-	int		fd_one[2];
-	int		fd_two[2];
+	int		*pid;
+	int		**fd;
 	int		fd_entry;
 	int		fd_end;
 	char	*path;

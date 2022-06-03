@@ -3,42 +3,6 @@
 //valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-fds=yes ./pipex blablabla
 
 
-// int	last_command(t_struct *data)
-// {
-// 	data->buffer = NULL;
-// 	return (1);
-// }
-
-// int	first_command(t_struct *data)
-// {
-// 	if (pipe(data->fd_one) == -1)
-// 		return (0);
-	
-// 	data->fd_entry = open(data->argv[1], O_RDONLY);
-// 	if (data->fd_entry == -1)
-// 		return (freeing(data), 0);
-
-// 	data->current_argv = 2;
-// 	if (get_the_path(data) == 0)
-// 		return (ft_printf("there is an error"), 0);
-// 	data->argz = parse_arguments(data);
-	
-// 	data->pid = fork();
-// 	if (data->pid == -1)
-// 		return (0);
-// 	if (data->pid == 0)
-// 	{
-// 		ft_printf("%s\n", data->path);
-// 		ft_printf("%s\n", data->argz[0]);
-// 		dup2(data->fd_one[1], STDOUT_FILENO);
-// 		dup2(data->fd_entry, STDIN_FILENO);
-// 		close (data->fd_entry);
-// 		close (data->fd_one[1]);
-// 		execve(data->path, data->argz, data->envp);
-// 	}
-// 	waitpid(data->pid, 0, 0);
-// 	return (1);
-// }
 
 // int	first_command_bis(t_struct *data)
 // {
@@ -110,25 +74,73 @@
 // 		}
 // 		data->current_argv++;
 // 	}
-	
-	
-	
-	
-	
-	
 // 	return (1);
 // }
+
+
+
+
+int	first_command(t_struct *data)
+{
+	data->current_argv = 2;
+	if (pipe(data->fd[2]) == -1)
+		return (0);
+	data->fd_entry = open(data->argv[1], O_RDONLY);
+	if (data->fd_entry == -1)
+		return (freeing(data), 0);
+
+	if (get_the_path(data) == 0)
+		return (ft_printf("there is an error"), 0);
+	data->argz = parse_arguments(data);
+	
+	data->pid[2] = fork();
+	if (data->pid[2] == -1)
+		return (0);
+	if (data->pid[2] == 0)
+	{
+		dup2(data->fd[2][1], STDOUT_FILENO);
+		dup2(data->fd_entry, STDIN_FILENO);
+		close (data->fd_entry);
+		close (data->fd[2][1]);
+		execve(data->path, data->argz, data->envp);
+	}
+	waitpid(data->pid[2], 0, 0);
+	return (1);
+}
+
+int	last_command(t_struct *data)
+{
+	data->fd_end = open("outfile.txt", O_RDWR);
+
+	data->current_argv++;
+	if (get_the_path(data) == 0)
+		return (ft_printf("there is an error"), 0);
+	data->argz = parse_arguments(data);
+
+	data->pid[3] = fork();
+	if (data->pid[3] == -1)
+		return (0);
+	if (data->pid[3] == 0)
+	{
+		dup2(data->fd[2][0], STDIN_FILENO);
+		dup2(data->fd_end, STDOUT_FILENO);
+		close (data->fd[2][0]);
+		close (data->fd[data->current_argv][1]);
+		execve(data->path, data->argz, data->envp);
+	}
+	waitpid(data->pid[3], 0, 0);
+	return (1);
+}
 
 int	pipexing(t_struct *data)
 {
 	if (first_command(data) == 0)
 		return(freeing(data), 0);		
-	if (middle_command(data) == 0)
-		return(freeing(data), 0);
+	// if (middle_command(data) == 0)
+	// 	return(freeing(data), 0);
 	if (last_command(data) == 0)
 		return(freeing(data), 0);
 		
-
 
 
 
@@ -144,6 +156,12 @@ int	pipexing(t_struct *data)
 
 	return (1);
 }
+
+
+
+
+
+
 
 int	main(int argc, char **argv, char **envp)
 {
