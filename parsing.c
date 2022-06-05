@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pathing.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/02 07:17:37 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/03 02:46:55 by nsartral         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "pipex.h"
 
 int	get_the_path(t_struct *data)
@@ -17,11 +5,8 @@ int	get_the_path(t_struct *data)
 	int		i;
 	char	*str;
 
-	if (data->order == 0)
-		str = data->argv[2];
-	if (data->order == 1)
-		str = data->argv[3];
 	i = 0;
+	str = data->argv[data->current_argv];
 	while (ft_strncmp(data->envp[i], "PATH=", 5) != 0)
 		i++;
 	data->unix_paths = ft_split(&data->envp[i][4], ':');
@@ -88,11 +73,8 @@ char	**parse_arguments(t_struct *data)
 	int		i;
 	int		j;
 
-	if (data->order == 0)
-		tmp = ft_split(data->argv[2], ' ');
-	if (data->order == 1)
-		tmp = ft_split(data->argv[3], ' ');
 	i = 0;
+	tmp = ft_split(data->argv[data->current_argv], ' ');
 	while (tmp[i])
 		i++;
 	argz = (char **)malloc(sizeof(char *) * (i + 3));
@@ -105,7 +87,6 @@ char	**parse_arguments(t_struct *data)
 		argz[j] = tmp[j];
 		j++;
 	}
-	data->order++;
 	argz[j] = NULL;
 	return (argz);
 }

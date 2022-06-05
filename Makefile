@@ -1,8 +1,8 @@
-SRCS			=	./srcs/pipexing.c ./srcs/parsing.c ./srcs/initing.c
+SRCS			=	./pipexing.c ./parsing.c ./utils.c
 
 OBJS			= 	$(SRCS:.c=.o)
 
-LIBS			= 	./srcs/libftprintf.a ./srcs/libft.a
+LIBS			= 	./libftprintf.a ./libft.a
 
 CC				= 	gcc
 RM				= 	rm -f

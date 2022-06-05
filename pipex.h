@@ -8,14 +8,18 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
-#include "ft_printf.h"
-#include "libft.h"
+#include "./incs/ft_printf.h"
+#include "./incs/libft.h"
+#include "errno.h"
+
+//valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-fds=yes ./pipex
 
 typedef struct s_struct
 {
-	char	**envp;
-	char	**argv;
 	int		argc;
+	char	**argv;
+	char	**envp;
+
 	char	**argz;
 	int		argz_num;
 	char	*buffer;
@@ -30,12 +34,11 @@ typedef struct s_struct
 	int		current_argv;
 }	t_struct;
 
-int		struct_init(t_struct *data, int argc,  char **argv, char **envp);
-void	freeing(t_struct *data);
-
-char	**parse_arguments(t_struct *data);
-char	*trim_command(char *str);
-char	*find_path(char *path, char *arg);
+int		struct_init(t_struct *data, int argc, char **argv, char **envp);
+void	erroring(t_struct *data, const char *error);
 int		get_the_path(t_struct *data);
+char	*find_path(char *path, char *arg);
+char	*trim_command(char *str);
+void	freeing(t_struct *data);
 
 #endif

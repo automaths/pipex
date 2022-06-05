@@ -1,5 +1,12 @@
 #include "pipex.h"
 
+void	erroring(t_struct *data, const char *error)
+{
+	freeing(data);
+	perror(error);
+	exit(1);
+}
+
 int	struct_init(t_struct *data, int argc, char **argv, char **envp)
 {	
 	data->envp = envp;
