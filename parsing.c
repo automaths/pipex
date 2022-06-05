@@ -1,44 +1,38 @@
 #include "pipex.h"
 
-int	get_the_path(t_struct *data)
+void	get_the_path(t_struct *data)
 {
-	int		i;
-	char	*str;
-
-	i = 0;
-	str = data->argv[data->current_argv];
-	while (ft_strncmp(data->envp[i], "PATH=", 5) != 0)
-		i++;
-	data->unix_paths = ft_split(&data->envp[i][4], ':');
-	i = 0;
-	data->command = trim_command(str);
-	while (data->unix_paths[i]
-		&& !find_path(data->unix_paths[i], data->command))
-		i++;
-	if (data->unix_paths[i])
+	data->i = 0;
+	while (ft_strncmp(data->envp[data->i], "PATH=", 5) != 0)
+		data->i++;
+	data->unix_paths = ft_split(&data->envp[data->i][4], ':');
+	data->i = 0;
+	trim_command(data, data->argv[data->c]);
+	find_path(data);
+	while (data->unix_paths[data->i] && data->path == NULL)
 	{
-		data->path = find_path(data->unix_paths[i], data->command);
-		return (1);
+		find_path(data);
+		data->i++;
 	}
-	return (0);
+	if (data->path == NULL)
+		exiting(data, "wrong command");
 }
 
-char	*find_path(char *path, char *arg)
+void	find_path(t_struct *data)
 {
 	char	*pathname;
 	char	add[1];
 
 	add[0] = '/';
-	(void)arg;
-	pathname = ft_strjoin(path, add);
-	pathname = ft_strjoin(pathname, arg);
+	pathname = ft_strjoin(data->unix_paths[data->i], add);
+	pathname = ft_strjoin(pathname, data->command);
 	if (access(pathname, X_OK) == 0)
-		return (pathname);
-	free(pathname);
-	return (NULL);
+		data->path = pathname;
+	else
+		data->path = NULL;
 }
 
-char	*trim_command(char *str)
+void	trim_command(t_struct *data, char *str)
 {
 	int		i;
 	int		j;
@@ -52,10 +46,10 @@ char	*trim_command(char *str)
 	while (str[i + j] >= 'a' && str[i + j] <= 'z')
 		j++;
 	if (j == 0)
-		return (NULL);
+		exiting(data, "wrong command");
 	command = (char *)malloc(sizeof(char) * (j + 1));
 	if (command == NULL)
-		return (NULL);
+		exiting(data, "malloc error");
 	command[j] = '\0';
 	j = 0;
 	while (str[i + j] >= 'a' && str[i + j] <= 'z')
@@ -63,23 +57,26 @@ char	*trim_command(char *str)
 		command[j] = str[i + j];
 		j++;
 	}
-	return (command);
+	data->command = command;
 }
 
-char	**parse_arguments(t_struct *data)
+void	parse_arguments(t_struct *data)
 {
 	char	**tmp;
 	char	**argz;
 	int		i;
 	int		j;
 
+	get_the_path(data);
 	i = 0;
-	tmp = ft_split(data->argv[data->current_argv], ' ');
+	tmp = ft_split(data->argv[data->c], ' ');
 	while (tmp[i])
 		i++;
+	if (i == 0)
+		exiting(data, "wrong arguments");
 	argz = (char **)malloc(sizeof(char *) * (i + 3));
 	if (argz == NULL)
-		return (NULL);
+		exiting(data, "malloc error");
 	argz[0] = data->command;
 	j = 1;
 	while (j <= i)
@@ -88,5 +85,6 @@ char	**parse_arguments(t_struct *data)
 		j++;
 	}
 	argz[j] = NULL;
-	return (argz);
+	data->argz = argz;
+	// ft_printf("%s", data->path);
 }
