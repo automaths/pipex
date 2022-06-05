@@ -1,5 +1,40 @@
 #include "pipex.h"
 
+char	*ft_strjoin_bis(char *s1, char *s2)
+{
+	char	*str;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	if (s1 == NULL || s2 == NULL)
+	{
+		if (s2 == NULL && s1)
+			free(s1);
+		return (NULL);
+	}
+	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 1);
+	if (str == NULL)
+		return (NULL);
+	while (s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{
+		str[i] = s2[j];
+		i++;
+		j++;
+	}
+	str[i] = '\0';
+	
+	free(s1);
+	// free(s2);
+	return (str);
+}
+
 void	exiting(t_struct *data, const char *error)
 {
 	close(data->fd[0]);
@@ -27,19 +62,42 @@ int	struct_init(t_struct *data, int argc, char **argv, char **envp)
 
 void	freeing(t_struct *data)
 {
-	data->buffer = NULL;
+	data->count = 0;
+	int i;
+	
+	if (data->path != NULL)
+		free(data->path);
+	i = 0;
+	if (data->unix_paths[i] != NULL)
+	{
+		while (data->unix_paths[i])
+		{
+			free(data->unix_paths[i]);
+			i++;
+		}
+	}
+	i = 0;
+	if (data->argz[i] != NULL)
+	{
+		while (data->argz[i])
+		{
+			free(data->argz[i]);
+			i++;
+		}
+	}
 }
 
 void	read_input(t_struct *data)
 {
 	data->buffer = (char *)malloc(sizeof(char) * 4096);
 	if (data->buffer == NULL)
-		exiting(data, "malloc error");
+		exiting(data, "merror");
 	data->count = read(data->fd[0], data->buffer, 4096);
 	if (data->count == -1)
 		exiting(data, "can't read");
 	data->buffer[data->count] = '\0';
 	ft_printf("%s", data->buffer);
+	free(data->buffer);
 }
 
 void	status(t_struct *data)

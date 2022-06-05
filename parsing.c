@@ -25,7 +25,7 @@ void	find_path(t_struct *data)
 
 	add[0] = '/';
 	pathname = ft_strjoin(data->unix_paths[data->i], add);
-	pathname = ft_strjoin(pathname, data->command);
+	pathname = ft_strjoin_bis(pathname, data->command);
 	if (access(pathname, X_OK) == 0)
 		data->path = pathname;
 	else
@@ -49,7 +49,7 @@ void	trim_command(t_struct *data, char *str)
 		exiting(data, "wrong command");
 	command = (char *)malloc(sizeof(char) * (j + 1));
 	if (command == NULL)
-		exiting(data, "malloc error");
+		exiting(data, "merror");
 	command[j] = '\0';
 	j = 0;
 	while (str[i + j] >= 'a' && str[i + j] <= 'z')
@@ -72,11 +72,12 @@ void	parse_arguments(t_struct *data)
 	tmp = ft_split(data->argv[data->c], ' ');
 	while (tmp[i])
 		i++;
+	free(tmp[0]);
 	if (i == 0)
 		exiting(data, "wrong arguments");
-	argz = (char **)malloc(sizeof(char *) * (i + 3));
+	argz = (char **)malloc(sizeof(char *) * (i + 2));
 	if (argz == NULL)
-		exiting(data, "malloc error");
+		exiting(data, "merror");
 	argz[0] = data->command;
 	j = 1;
 	while (j <= i)
@@ -86,5 +87,4 @@ void	parse_arguments(t_struct *data)
 	}
 	argz[j] = NULL;
 	data->argz = argz;
-	// ft_printf("%s", data->path);
 }

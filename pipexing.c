@@ -27,6 +27,7 @@ void	first_command(t_struct *data)
 	waitpid(data->pid, 0, 0);
 	close(data->fd_entry);
 	close(data->fd[1]);
+	freeing(data);
 	// close(data->fd[0]);
 }
 
@@ -51,12 +52,14 @@ void	last_command(t_struct *data)
 		close(data->fd[1]);
 		close(data->fd[0]);
 		execve(data->path, data->argz, data->envp);
+
 	}
 	waitpid(data->pid, 0, 0);
 	close(data->fd[1]);
 	close(data->fd_end);
 	read_input(data);
 	close(data->fd[0]);
+	freeing(data);
 }
 
 void	pipexing(t_struct *data)
