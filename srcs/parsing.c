@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/06 05:55:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/06 05:55:33 by nsartral         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "pipex.h"
 
 void	get_the_path(t_struct *data)
@@ -91,9 +79,12 @@ void	parse_arguments(t_struct *data)
 	if (argz == NULL)
 		exiting(data, "merror");
 	argz[0] = data->command;
-	j = 0;
-	while (++j <= i)
+	j = 1;
+	while (j <= i)
+	{
 		argz[j] = tmp[j];
+		j++;
+	}
 	argz[j] = NULL;
 	free(tmp[0]);
 	free(tmp);

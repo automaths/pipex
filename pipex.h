@@ -14,6 +14,8 @@
 
 //valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-fds=yes ./pipex
 
+//access(..., F_OK or R_OK)
+
 typedef struct s_struct
 {
 	int i;
@@ -42,24 +44,27 @@ typedef struct s_struct
 	int		fd_end;
 }	t_struct;
 
-char	*ft_strjoin_bis(char *s1, char *s2);
-int		struct_init(t_struct *data, int argc, char **argv, char **envp);
-void	exiting(t_struct *data, const char *error);
-void	freeing(t_struct *data);
-void	status(t_struct *data);
-void	read_input(t_struct *data);
-
 void	get_the_path(t_struct *data);
 int		find_path(t_struct *data);
 void	trim_command(t_struct *data, char *str);
 void	parse_arguments(t_struct *data);
 
-void	first_command(t_struct *data);
-void	last_command(t_struct *data);
-void	middle_command(t_struct *data);
-void	loop_command(t_struct *data);
+void	status(t_struct *data);
+void	read_input(t_struct *data);
 
 void	outfiling(t_struct *data);
+void	freeing_exit(t_struct *data);
+void	freeing_parsing(t_struct *data);
+void	struct_init_one(t_struct *data, int argc, char **argv, char **envp);
+void	struct_init_two(t_struct *data, int argc, char **argv, char **envp);
+void	exiting(t_struct *data, const char *error);
+char	*ft_strjoin_bis(char *s1, char *s2);
 
+void	first_command(t_struct *data);
+void	last_command(t_struct *data);
+
+void	exiting(t_struct *data, const char *error);
+void	freeing_exit(t_struct *data);
+void	freeing_parsing(t_struct *data);
 
 #endif

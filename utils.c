@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/06 05:56:59 by nsartral          #+#    #+#             */
+/*   Updated: 2022/06/06 07:11:32 by nsartral         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 
 char	*ft_strjoin_bis(char *s1, char *s2)
@@ -6,8 +18,6 @@ char	*ft_strjoin_bis(char *s1, char *s2)
 	int		i;
 	int		j;
 
-	i = 0;
-	j = 0;
 	if (s1 == NULL || s2 == NULL)
 	{
 		if (s2 == NULL && s1)
@@ -16,32 +26,21 @@ char	*ft_strjoin_bis(char *s1, char *s2)
 	}
 	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 1);
 	if (str == NULL)
-		return (NULL);
-	while (s1[i])
-	{
+		return (free(s1), NULL);
+	i = -1;
+	while (s1[++i])
 		str[i] = s1[i];
-		i++;
-	}
-	while (s2[j])
+	j = -1;
+	while (s2[++j])
 	{
 		str[i] = s2[j];
 		i++;
-		j++;
 	}
 	str[i] = '\0';
-	
-	free(s1);
-	return (str);
+	return (free(s1), str);
 }
 
-void	exiting(t_struct *data, const char *error)
-{
-	freeing(data);
-	perror(error);
-	exit(1);
-}
-
-int	struct_init(t_struct *data, int argc, char **argv, char **envp)
+void	struct_init_one(t_struct *data, int argc, char **argv, char **envp)
 {	
 	data->envp = envp;
 	data->argv = argv;
@@ -52,9 +51,16 @@ int	struct_init(t_struct *data, int argc, char **argv, char **envp)
 	data->path = NULL;
 	data->command = NULL;
 	data->unix_paths = NULL;
-	data->pid = 0;
-	
-	int i;
+	data->fd = NULL;
+	data->pid = NULL;
+}
+
+void	struct_init_two(t_struct *data, int argc, char **argv, char **envp)
+{
+	int	i;
+
+	(void)argv;
+	(void)envp;
 	i = 0;
 	data->fd = (int **)malloc(sizeof(int *) * data->argc - 3);
 	if (data->fd == NULL)
@@ -69,62 +75,6 @@ int	struct_init(t_struct *data, int argc, char **argv, char **envp)
 	data->pid = (int *)malloc(sizeof(int) * argc - 3);
 	if (data->pid == NULL)
 		exiting(data, "merror int");
-	return (1);
-}
-
-void	freeing(t_struct *data)
-{
-	data->count = 0;
-	int i;
-	
-	if (data->path != NULL)
-		free(data->path);
-	i = 0;
-	if (data->unix_paths[i] != NULL)
-	{
-		while (data->unix_paths[i])
-		{
-			free(data->unix_paths[i]);
-			i++;
-		}
-	}
-	i = 0;
-	if (data->argz[i] != NULL)
-	{
-		while (data->argz[i])
-		{
-			free(data->argz[i]);
-			i++;
-		}
-	}
-}
-
-void	read_input(t_struct *data)
-{
-	data->buffer = (char *)malloc(sizeof(char) * 4096);
-	if (data->buffer == NULL)
-		exiting(data, "merror");
-	data->count = read(data->fd[data->c - 2][0], data->buffer, 4096);
-	if (data->count == -1)
-		exiting(data, "can't read");
-	data->buffer[data->count] = '\0';
-	ft_printf("\nTHE READ ---\nthe read is : %s\n", data->buffer);
-	free(data->buffer);
-}
-
-void	status(t_struct *data)
-{
-	int i;
-	
-	i = 0;
-	ft_printf("\nTHE STATUS --\n%s\n", data->argv[data->argc - 1]);
-	ft_printf("%s\n\n", data->path);
-	while (data->argz[i])
-	{
-		ft_printf("%s\n", data->argz[i]);
-		i++;
-	}
-	ft_printf("END===\n");
 }
 
 void	outfiling(t_struct *data)
@@ -132,15 +82,17 @@ void	outfiling(t_struct *data)
 	data->output_buff = (char *)malloc(sizeof(char) * 4096);
 	if (data->output_buff == NULL)
 		exiting(data, "merror");
-	data->count = read(data->fd[data->c - 2][0], data->output_buff, 4096);
+	ft_printf("HEYHEY");
+	data->count = read(data->fd[data->argc - 4][0], data->output_buff, 4096);
 	if (data->count == -1)
 		exiting(data, "can't read");
 	data->output_buff[data->count] = '\0';
-	data->fd_end = open(data->argv[data->argc - 1], O_RDWR | O_TRUNC);
+	data->fd_end = open(data->argv[data->argc - 1], O_TRUNC | O_CREAT | O_RDWR);
 	if (data->fd_end == -1)
 		exiting(data, "can't open output file");
 	data->count_bis = write(data->fd_end, data->output_buff, data->count);
 	if (data->count_bis == -1)
 		exiting(data, "can't write on output");
-
+	free(data->output_buff);
 }
+//, 0644 wtf
