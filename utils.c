@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 05:56:59 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/06 07:11:32 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/06 08:47:02 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,59 +40,76 @@ char	*ft_strjoin_bis(char *s1, char *s2)
 	return (free(s1), str);
 }
 
-void	struct_init_one(t_struct *data, int argc, char **argv, char **envp)
-{	
-	data->envp = envp;
-	data->argv = argv;
-	data->argc = argc;
-	data->command = NULL;
-	data->argz = NULL;
-	data->buffer = NULL;
-	data->path = NULL;
-	data->command = NULL;
-	data->unix_paths = NULL;
-	data->fd = NULL;
-	data->pid = NULL;
+void	struct_init(t_struct *dd, int argc, char **argv, char **envp)
+{
+	dd->envp = envp;
+	dd->argv = argv;
+	dd->argc = argc;
+	dd->command = NULL;
+	dd->argz = NULL;
+	dd->buffer = NULL;
+	dd->path = NULL;
+	dd->command = NULL;
+	dd->unix_paths = NULL;
+
 }
 
-void	struct_init_two(t_struct *data, int argc, char **argv, char **envp)
+void	outfiling(t_struct *dd)
+{
+	dd->fd_outfile = open(dd->argv[dd->argc - 1], O_TRUNC | O_CREAT | O_RDWR);
+	if (dd->fd_outfile == -1)
+		exiting(dd, "can't open output file");
+	dd->output_buff = (char *)malloc(sizeof(char) * 4096);
+	if (dd->output_buff == NULL)
+		exiting(dd, "merror");
+	dd->count = read(dd->fd_two[0], dd->output_buff, 4096);
+	if (dd->count == -1)
+		exiting(dd, "can't read");
+	if (dd->count != 0)
+	{
+		dd->output_buff[dd->count] = '\0';
+		dd->count_bis = write(dd->fd_outfile, dd->output_buff, dd->count);
+		if (dd->count_bis == -1)
+			exiting(dd, "can't write on output");
+	}
+	close(dd->fd_outfile);
+	close(dd->fd_two[0]);
+	free(dd->output_buff);
+}
+//, 0644 wtf
+
+void	freeing(t_struct *dd)
 {
 	int	i;
 
-	(void)argv;
-	(void)envp;
+	if (dd->path != NULL)
+		free(dd->path);
 	i = 0;
-	data->fd = (int **)malloc(sizeof(int *) * data->argc - 3);
-	if (data->fd == NULL)
-		exiting(data, "merror int");
-	while (i < data->argc - 3)
+	if (dd->unix_paths[i] != NULL)
 	{
-		data->fd[i] = (int *)malloc(sizeof(int) * 2);
-		if (data->fd[i] == NULL)
-			exiting(data, "merror int");
-		i++;
+		while (dd->unix_paths[i])
+		{
+			free(dd->unix_paths[i]);
+			i++;
+		}
+		free(dd->unix_paths);
 	}
-	data->pid = (int *)malloc(sizeof(int) * argc - 3);
-	if (data->pid == NULL)
-		exiting(data, "merror int");
+	i = 0;
+	if (dd->argz[i] != NULL)
+	{
+		while (dd->argz[i])
+		{
+			free(dd->argz[i]);
+			i++;
+		}
+		free(dd->argz);
+	}
 }
 
-void	outfiling(t_struct *data)
+void	exiting(t_struct *dd, const char *error)
 {
-	data->output_buff = (char *)malloc(sizeof(char) * 4096);
-	if (data->output_buff == NULL)
-		exiting(data, "merror");
-	ft_printf("HEYHEY");
-	data->count = read(data->fd[data->argc - 4][0], data->output_buff, 4096);
-	if (data->count == -1)
-		exiting(data, "can't read");
-	data->output_buff[data->count] = '\0';
-	data->fd_end = open(data->argv[data->argc - 1], O_TRUNC | O_CREAT | O_RDWR);
-	if (data->fd_end == -1)
-		exiting(data, "can't open output file");
-	data->count_bis = write(data->fd_end, data->output_buff, data->count);
-	if (data->count_bis == -1)
-		exiting(data, "can't write on output");
-	free(data->output_buff);
+	dd->buffer = NULL;
+	freeing(dd);
+	perror(error);
+	exit(1);
 }
-//, 0644 wtf

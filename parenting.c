@@ -1,67 +1,66 @@
 #include "pipex.h"
 
-void	first_command(t_struct *data)
+//access(..., F_OK or R_OK)
+
+void	first_command(t_struct *dd)
 {
-	data->c = 2;
-	parse_arguments(data);
-	if (data->argz == NULL)
-		exiting(data, "wrong command");
-	if (data->path == NULL)
-		exiting(data, "wrong first argument");
-	data->fd_entry = open(data->argv[1], O_RDONLY);
-	if (data->fd_entry == -1)
-		exiting(data, "can't open input file");
-	if (pipe(data->fd[data->c - 2]) == -1)
-		exiting(data, "can't pipe");
-	data->pid[data->c - 2] = fork();
-	if (data->pid[data->c - 2] == 0)
-	{
-		dup2(data->fd_entry, STDIN_FILENO);
-		dup2(data->fd[data->c - 2][1], STDOUT_FILENO);
-		close(data->fd_entry);
-		close(data->fd[data->c - 2][1]);
-		close(data->fd[data->c - 2][0]);
-		status(data);
-		execve(data->path, data->argz, data->envp);
-	}
-	else 
-	{
-		waitpid(data->pid[data->c - 2], 0, 0);
-		close(data->fd_entry);
-		close(data->fd[data->c - 2][1]);
-		freeing_parsing(data);
-	}
+	dd->c = 2;
+	parse_arguments(dd);
+	if (dd->argz == NULL)
+		exiting(dd, "wrong command");
+	if (dd->path == NULL)
+		exiting(dd, "wrong first argument");
+	dd->fd_infile = open(dd->argv[1], O_RDONLY);
+	if (dd->fd_infile == -1)
+		exiting(dd, "can't open input file");
+	if (pipe(dd->fd_one) == -1)
+		exiting(dd, "can't pipe");
+	if (forking(dd, dd->fd_infile, dd->fd_one[1]) == 0)
+		exiting(dd, "first fork failure");
+	waitpid(dd->pid_one, 0, 0);
+	close(dd->fd_infile);
+	close(dd->fd_one[1]);
+	freeing(dd);
 }
 
-void	last_command(t_struct *data)
+void	last_command(t_struct *dd)
 {
-	data->c = data->argc - 2;
-	parse_arguments(data);
-	if (data->argz == NULL)
-		exiting(data, "wrong command");
-	if (data->path == NULL)
-		exiting(data, "wrong first argument");
-	if (pipe(data->fd[data->c - 2]) == -1)
-		exiting(data, "can't pipe");
-	data->pid[data->c - 2] = fork();
-	if (data->pid[data->c - 2] == 0)
-	{
-		dup2(data->fd[data->c - 3][0], STDIN_FILENO);
-		dup2(data->fd[data->c - 2][1], STDOUT_FILENO);
-		close(data->fd[data->c - 2][1]);
-		close(data->fd[data->c - 2][0]);
-		close(data->fd[data->c - 3][0]);
-		execve(data->path, data->argz, data->envp);
-	}
-	else
-	{
-		waitpid(data->pid[data->c - 2], 0, 0);
-		outfiling(data);
-		close(data->fd[data->c - 3][0]);
-		close(data->fd[data->c - 2][1]);
-		close(data->fd[data->c - 2][0]);
-		close(data->fd_end);
-		freeing_parsing(data);
-	}
+	dd->c = 3;
+	parse_arguments(dd);
+	if (dd->argz == NULL)
+		exiting(dd, "wrong command");
+	if (dd->path == NULL)
+		exiting(dd, "wrong first argument");
+	if (pipe(dd->fd_two) == -1)
+		exiting(dd, "can't pipe");
+	if (forking(dd, dd->fd_one[0], dd->fd_two[1]) == 0)
+		exiting(dd, "second fork failure");
+	waitpid(dd->pid_two, 0, 0);
+	close(dd->fd_one[0]);
+	close(dd->fd_two[1]);
+	outfiling(dd);
+	freeing(dd);
 }
 
+int	forking(t_struct *dd, int fd_in, int fd_out)
+{
+	dd->pid_two = fork();
+	if (dd->pid_two == -1)
+		return (0);
+	if (dd->pid_two == 0)
+	{
+		if (dup2(fd_in, STDIN_FILENO) == -1)
+			dd->error = 1;
+		if (dup2(fd_out, STDOUT_FILENO) == -1)
+			dd->error = 1;
+		close(fd_in);
+		close(fd_out);
+		if (dd->error == 1)
+			return (0);
+		if (execve(dd->path, dd->argz, dd->envp) == -1)
+			dd->error = 1;
+	}
+	if (dd->error == 1)
+		return (0);
+	return (1);
+}
