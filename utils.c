@@ -31,15 +31,11 @@ char	*ft_strjoin_bis(char *s1, char *s2)
 	str[i] = '\0';
 	
 	free(s1);
-	// free(s2);
 	return (str);
 }
 
 void	exiting(t_struct *data, const char *error)
 {
-	close(data->fd[0]);
-	close(data->fd[1]);
-	close(data->fd_entry);
 	freeing(data);
 	perror(error);
 	exit(1);
@@ -57,6 +53,22 @@ int	struct_init(t_struct *data, int argc, char **argv, char **envp)
 	data->command = NULL;
 	data->unix_paths = NULL;
 	data->pid = 0;
+	
+	int i;
+	i = 0;
+	data->fd = (int **)malloc(sizeof(int *) * data->argc - 3);
+	if (data->fd == NULL)
+		exiting(data, "merror int");
+	while (i < data->argc - 3)
+	{
+		data->fd[i] = (int *)malloc(sizeof(int) * 2);
+		if (data->fd[i] == NULL)
+			exiting(data, "merror int");
+		i++;
+	}
+	data->pid = (int *)malloc(sizeof(int) * argc - 3);
+	if (data->pid == NULL)
+		exiting(data, "merror int");
 	return (1);
 }
 
@@ -92,11 +104,11 @@ void	read_input(t_struct *data)
 	data->buffer = (char *)malloc(sizeof(char) * 4096);
 	if (data->buffer == NULL)
 		exiting(data, "merror");
-	data->count = read(data->fd[0], data->buffer, 4096);
+	data->count = read(data->fd[data->c - 2][0], data->buffer, 4096);
 	if (data->count == -1)
 		exiting(data, "can't read");
 	data->buffer[data->count] = '\0';
-	ft_printf("%s", data->buffer);
+	ft_printf("\nTHE READ ---\nthe read is : %s\n", data->buffer);
 	free(data->buffer);
 }
 
@@ -105,11 +117,30 @@ void	status(t_struct *data)
 	int i;
 	
 	i = 0;
-	ft_printf("%s\n", data->argv[data->argc - 1]);
+	ft_printf("\nTHE STATUS --\n%s\n", data->argv[data->argc - 1]);
 	ft_printf("%s\n\n", data->path);
 	while (data->argz[i])
 	{
 		ft_printf("%s\n", data->argz[i]);
 		i++;
 	}
+	ft_printf("END===\n");
+}
+
+void	outfiling(t_struct *data)
+{
+	data->output_buff = (char *)malloc(sizeof(char) * 4096);
+	if (data->output_buff == NULL)
+		exiting(data, "merror");
+	data->count = read(data->fd[data->c - 2][0], data->output_buff, 4096);
+	if (data->count == -1)
+		exiting(data, "can't read");
+	data->output_buff[data->count] = '\0';
+	data->fd_end = open(data->argv[data->argc - 1], O_RDWR | O_TRUNC);
+	if (data->fd_end == -1)
+		exiting(data, "can't open output file");
+	data->count_bis = write(data->fd_end, data->output_buff, data->count);
+	if (data->count_bis == -1)
+		exiting(data, "can't write on output");
+
 }

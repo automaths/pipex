@@ -1,4 +1,4 @@
-SRCS			=	./pipexing.c ./parsing.c ./utils.c
+SRCS			=	./pipexing.c ./parsing.c ./utils.c ./gating.c
 
 OBJS			= 	$(SRCS:.c=.o)
 

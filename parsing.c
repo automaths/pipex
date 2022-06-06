@@ -9,16 +9,13 @@ void	get_the_path(t_struct *data)
 	data->i = 0;
 	trim_command(data, data->argv[data->c]);
 	find_path(data);
-	while (data->unix_paths[data->i] && data->path == NULL)
-	{
-		find_path(data);
+	while (data->unix_paths[data->i] && find_path(data) == 0)
 		data->i++;
-	}
 	if (data->path == NULL)
 		exiting(data, "wrong command");
 }
 
-void	find_path(t_struct *data)
+int	find_path(t_struct *data)
 {
 	char	*pathname;
 	char	add[1];
@@ -27,9 +24,11 @@ void	find_path(t_struct *data)
 	pathname = ft_strjoin(data->unix_paths[data->i], add);
 	pathname = ft_strjoin_bis(pathname, data->command);
 	if (access(pathname, X_OK) == 0)
+	{
 		data->path = pathname;
-	else
-		data->path = NULL;
+		return (1);
+	}
+	return (0);
 }
 
 void	trim_command(t_struct *data, char *str)
@@ -86,5 +85,6 @@ void	parse_arguments(t_struct *data)
 		j++;
 	}
 	argz[j] = NULL;
+	free(tmp);
 	data->argz = argz;
 }

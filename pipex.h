@@ -30,9 +30,13 @@ typedef struct s_struct
 
 	char	*buffer;
 	int		count;
+	int		count_bis;
+	char 	*output_buff;
 	
-	int		pid;
-	int		fd[2];
+	int		*pid;
+	int		**fd;
+	int		fdt[3][2];
+	
 	int		fde[2];
 	int		fd_entry;
 	int		fd_end;
@@ -46,9 +50,16 @@ void	status(t_struct *data);
 void	read_input(t_struct *data);
 
 void	get_the_path(t_struct *data);
-void	find_path(t_struct *data);
+int		find_path(t_struct *data);
 void	trim_command(t_struct *data, char *str);
 void	parse_arguments(t_struct *data);
+
+void	first_command(t_struct *data);
+void	last_command(t_struct *data);
+void	middle_command(t_struct *data);
+void	loop_command(t_struct *data);
+
+void	outfiling(t_struct *data);
 
 
 #endif
