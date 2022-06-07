@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 05:55:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/07 04:01:45 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/07 05:34:47 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,32 @@ void	command_trim(t_struct *dd)
 	dd->command[j] = '\0';
 }
 
-int	find_path(t_struct *data)
+void	free_unix(t_struct *dd)
 {
-	char	*pathname;
+	int i;
+	
+	i = 0;
+	if (dd->unix_paths != NULL)
+	{
+		while (dd->unix_paths[i])
+		{
+			free(dd->unix_paths[i]);
+			i++;
+		}
+		free(dd->unix_paths);
+	}
+}
+
+int	find_path(t_struct *dd)
+{;
 	char	add[1];
 
 	add[0] = '/';
-	pathname = ft_strjoin(data->unix_paths[data->i], add);
-	pathname = ft_strjoin_bis(pathname, data->command);
-	if (access(pathname, X_OK) == 0)
-	{
-		data->path = pathname;
+	dd->path = ft_strjoin_new(dd->unix_paths[dd->i], add, 0);
+	dd->path = ft_strjoin_new(dd->path, dd->command, 1);
+	if (access(dd->path, X_OK) == 0)
 		return (1);
-	}
-	else
-		free(pathname);
+	free(dd->path);
 	return (0);
 }
 
@@ -73,26 +84,26 @@ void	get_the_path(t_struct *dd)
 	dd->i = 0;
 	while (dd->unix_paths[dd->i] && find_path(dd) == 0)
 		dd->i++;
-	if (dd->path == NULL)
-		return ;
 }
 
-void	parse_arguments(t_struct *data)
+int	parse_arguments(t_struct *data)
 {
 	char	**tmp;
 	int		i;
 	int		j;
 
 	get_the_path(data);
+	if (data->path == NULL)
+		return ;
 	i = 0;
 	tmp = ft_split(data->argv[data->c], ' ');
 	while (tmp[i])
 		i++;
 	if (i == 0)
-		p_exiting(data, "wrong arguments");
+		return (0);
 	data->argz = (char **)malloc(sizeof(char *) * (i + 2));
 	if (data->argz == NULL)
-		p_exiting(data, "merror");
+		return (0);
 	data->argz[0] = data->command;
 	ft_printf("%s\n", data->argz[0]);
 	j = 0;
@@ -101,4 +112,5 @@ void	parse_arguments(t_struct *data)
 	data->argz[j] = NULL;
 	free(tmp[0]);
 	free(tmp);
+	return (1);
 }

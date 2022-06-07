@@ -42,11 +42,15 @@ int	main(int argc, char **argv, char **envp)
 
 	// dd.c = 2;
 	// get_the_path(&dd);
-	// if (check_argz(&dd))
+	// if (!check_argz(&dd))
 	// 	return (freeing(&dd), 0);
 
-	// ft_printf("\n%s\n", dd.path);
+	first_command(&dd);
+	last_command(&dd);
 	
+	
+	
+	// ft_printf("\n%s\n", dd.path);
 	// int i;
 	// i = 0;
 	// ft_printf("\n%s\n", dd.path);
@@ -56,12 +60,9 @@ int	main(int argc, char **argv, char **envp)
 	// 	ft_printf("\n%s\n", dd.argz[i]);
 	// 	i++;
 	// }
-
 	// dd.c++;
 	// get_the_path(&dd);
 
-	first_command(&dd);
-	last_command(&dd);
 	freeing(&dd);
 	return (0);
 }

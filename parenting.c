@@ -5,7 +5,11 @@
 void	first_command(t_struct *dd)
 {
 	dd->c = 2;
-	parse_arguments(dd);
+	if (parse_arguments(dd) == 0)
+	{
+		ft_printf("wrong parsing");
+		return ;
+	}
 	if (dd->argz == NULL)
 		p_exiting(dd, "wrong command");
 	if (dd->path == NULL)
@@ -30,7 +34,11 @@ void	first_command(t_struct *dd)
 void	last_command(t_struct *dd)
 {
 	dd->c = 3;
-	parse_arguments(dd);
+	if (parse_arguments(dd) == 0)
+	{
+		ft_printf("wrong parsing");
+		return ;
+	}
 	if (dd->argz == NULL)
 		p_exiting(dd, "wrong command");
 	if (dd->path == NULL)

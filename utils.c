@@ -6,39 +6,11 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 05:56:59 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/07 03:07:54 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/07 04:09:53 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-char	*ft_strjoin_bis(char *s1, char *s2)
-{
-	char	*str;
-	int		i;
-	int		j;
-
-	if (s1 == NULL || s2 == NULL)
-	{
-		if (s2 == NULL && s1)
-			free(s1);
-		return (NULL);
-	}
-	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 1);
-	if (str == NULL)
-		return (free(s1), NULL);
-	i = -1;
-	while (s1[++i])
-		str[i] = s1[i];
-	j = -1;
-	while (s2[++j])
-	{
-		str[i] = s2[j];
-		i++;
-	}
-	str[i] = '\0';
-	return (free(s1), str);
-}
 
 void	struct_init(t_struct *dd, int argc, char **argv, char **envp)
 {

@@ -57,7 +57,7 @@ void	outfiling(t_struct *data);
 void	freeing(t_struct *data);
 void	struct_init(t_struct *data, int argc, char **argv, char **envp);
 void	p_exiting(t_struct *data, const char *error);
-char	*ft_strjoin_bis(char *s1, char *s2);
+char	*ft_strjoin_new(char *s1, char *s2, int flag);
 
 void	first_command(t_struct *data);
 void	last_command(t_struct *data);
