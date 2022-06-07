@@ -51,7 +51,7 @@ typedef struct s_struct
 void	get_the_path(t_struct *data);
 int		find_path(t_struct *data);
 void	command_trim(t_struct *data);
-void	parse_arguments(t_struct *data);
+int		parse_arguments(t_struct *data);
 
 void	outfiling(t_struct *data);
 void	freeing(t_struct *data);

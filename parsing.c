@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 05:55:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/07 05:34:47 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/08 01:22:35 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	parse_arguments(t_struct *data)
 
 	get_the_path(data);
 	if (data->path == NULL)
-		return ;
+		return (0);
 	i = 0;
 	tmp = ft_split(data->argv[data->c], ' ');
 	while (tmp[i])
