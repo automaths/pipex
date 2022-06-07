@@ -13,3 +13,10 @@ bool	is_whitespace(char c)
 		return (1);
 	return (0);
 }
+
+bool	is_lowercase(char c)
+{
+	if (c >= 'a' && c <= 'z')
+		return (1);
+	return (0);
+}

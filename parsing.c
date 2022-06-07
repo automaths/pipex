@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 05:55:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/07 03:53:41 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/07 04:01:45 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,6 @@ void	get_the_path(t_struct *dd)
 	if (dd->path == NULL)
 		return ;
 }
-
-bool	is_lowercase(char c)
-{
-	if (c >= 'a' && c <= 'z')
-		return (1);
-	return (0);
-}
-
 
 void	parse_arguments(t_struct *data)
 {
