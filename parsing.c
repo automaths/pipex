@@ -6,25 +6,35 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 05:55:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/06 08:44:55 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/07 03:53:41 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	get_the_path(t_struct *data)
+void	command_trim(t_struct *dd)
 {
-	data->i = 0;
-	while (ft_strncmp(data->envp[data->i], "PATH=", 5) != 0)
-		data->i++;
-	data->unix_paths = ft_split(&data->envp[data->i][4], ':');
-	data->i = 0;
-	trim_command(data, data->argv[data->c]);
-	find_path(data);
-	while (data->unix_paths[data->i] && find_path(data) == 0)
-		data->i++;
-	if (data->path == NULL)
-		exiting(data, "wrong command");
+	int		i;
+	int		j;
+
+	i = 0;
+	while (is_whitespace(dd->argv[dd->c][i]))
+		i++;
+	j = 0;
+	while (is_lowercase(dd->argv[dd->c][i + j]))
+		j++;
+	if (j == 0)
+		return ;
+	dd->command = (char *)malloc(sizeof(char) * (j + 1));
+	if (dd->command == NULL)
+		p_exiting(dd, "malloc error");
+	j = 0;
+	while (is_lowercase(dd->argv[dd->c][i + j]))
+	{
+		dd->command[j] = dd->argv[dd->c][i + j];
+		j++;
+	}
+	dd->command[j] = '\0';
 }
 
 int	find_path(t_struct *data)
@@ -45,38 +55,39 @@ int	find_path(t_struct *data)
 	return (0);
 }
 
-void	trim_command(t_struct *data, char *str)
+void	get_the_path(t_struct *dd)
 {
-	int		i;
-	int		j;
-	char	*command;
-
+	int i;
+	
 	i = 0;
-	while (str[i] && str[i] == ' ' && str[i] == '\t' && str[i] == '\v'
-		&& str[i] == '\n' && str[i] == '\r' && str[i] == '\f')
+	while (dd->envp[i] && ft_strncmp(dd->envp[i], "PATH=", 5) != 0)
 		i++;
-	j = 0;
-	while (str[i + j] >= 'a' && str[i + j] <= 'z')
-		j++;
-	if (j == 0)
-		exiting(data, "wrong command");
-	command = (char *)malloc(sizeof(char) * (j + 1));
-	if (command == NULL)
-		exiting(data, "merror");
-	command[j] = '\0';
-	j = 0;
-	while (str[i + j] >= 'a' && str[i + j] <= 'z')
-	{
-		command[j] = str[i + j];
-		j++;
-	}
-	data->command = command;
+	if (dd->envp[i] == NULL)
+		return ;
+	dd->unix_paths = ft_split(&dd->envp[i][4], ':');
+	if (dd->unix_paths == NULL)
+		return ;
+	command_trim(dd);
+	if (dd->command == NULL)
+		return ;
+	dd->i = 0;
+	while (dd->unix_paths[dd->i] && find_path(dd) == 0)
+		dd->i++;
+	if (dd->path == NULL)
+		return ;
 }
+
+bool	is_lowercase(char c)
+{
+	if (c >= 'a' && c <= 'z')
+		return (1);
+	return (0);
+}
+
 
 void	parse_arguments(t_struct *data)
 {
 	char	**tmp;
-	char	**argz;
 	int		i;
 	int		j;
 
@@ -86,16 +97,16 @@ void	parse_arguments(t_struct *data)
 	while (tmp[i])
 		i++;
 	if (i == 0)
-		exiting(data, "wrong arguments");
-	argz = (char **)malloc(sizeof(char *) * (i + 2));
-	if (argz == NULL)
-		exiting(data, "merror");
-	argz[0] = data->command;
+		p_exiting(data, "wrong arguments");
+	data->argz = (char **)malloc(sizeof(char *) * (i + 2));
+	if (data->argz == NULL)
+		p_exiting(data, "merror");
+	data->argz[0] = data->command;
+	ft_printf("%s\n", data->argz[0]);
 	j = 0;
 	while (++j <= i)
-		argz[j] = tmp[j];
-	argz[j] = NULL;
+		data->argz[j] = tmp[j];
+	data->argz[j] = NULL;
 	free(tmp[0]);
 	free(tmp);
-	data->argz = argz;
 }

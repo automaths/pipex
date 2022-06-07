@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+#include <stdbool.h>
 
 #include "./incs/ft_printf.h"
 #include "./incs/libft.h"
@@ -49,20 +50,22 @@ typedef struct s_struct
 
 void	get_the_path(t_struct *data);
 int		find_path(t_struct *data);
-void	trim_command(t_struct *data, char *str);
+void	command_trim(t_struct *data);
 void	parse_arguments(t_struct *data);
 
 void	outfiling(t_struct *data);
 void	freeing(t_struct *data);
 void	struct_init(t_struct *data, int argc, char **argv, char **envp);
-void	exiting(t_struct *data, const char *error);
+void	p_exiting(t_struct *data, const char *error);
 char	*ft_strjoin_bis(char *s1, char *s2);
 
 void	first_command(t_struct *data);
 void	last_command(t_struct *data);
 
-void	exiting(t_struct *data, const char *error);
-
 int		forking(t_struct *data, int fd_in, int fd_out);
+
+bool	is_printable(char c);
+bool	is_whitespace(char c);
+bool	is_lowercase(char c);
 
 #endif

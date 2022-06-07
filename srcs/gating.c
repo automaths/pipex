@@ -5,14 +5,14 @@ void	first_command(t_struct *data)
 	data->c = 2;
 	parse_arguments(data);
 	if (data->argz == NULL)
-		exiting(data, "wrong command");
+		p_exiting(data, "wrong command");
 	if (data->path == NULL)
-		exiting(data, "wrong first argument");
+		p_exiting(data, "wrong first argument");
 	data->fd_entry = open(data->argv[1], O_RDONLY);
 	if (data->fd_entry == -1)
-		exiting(data, "can't open input file");
+		p_exiting(data, "can't open input file");
 	if (pipe(data->fd[data->c - 2]) == -1)
-		exiting(data, "can't pipe");
+		p_exiting(data, "can't pipe");
 	data->pid[data->c - 2] = fork();
 	if (data->pid[data->c - 2] == 0)
 	{
@@ -40,11 +40,11 @@ void	loop_command(t_struct *data)
 		data->c++;
 		parse_arguments(data);
 		if (data->argz == NULL)
-			exiting(data, "wrong command");
+			p_exiting(data, "wrong command");
 		if (data->path == NULL)
-			exiting(data, "wrong first argument");
+			p_exiting(data, "wrong first argument");
 		if (pipe(data->fd[data->c - 2]) == -1)
-			exiting(data, "can't pipe");
+			p_exiting(data, "can't pipe");
 		data->pid[data->c - 2] = fork();
 		if (data->pid[data->c - 2] == 0)
 		{
@@ -70,11 +70,11 @@ void	last_command(t_struct *data)
 	data->c = data->argc - 2;
 	parse_arguments(data);
 	if (data->argz == NULL)
-		exiting(data, "wrong command");
+		p_exiting(data, "wrong command");
 	if (data->path == NULL)
-		exiting(data, "wrong first argument");
+		p_exiting(data, "wrong first argument");
 	if (pipe(data->fd[data->c - 2]) == -1)
-		exiting(data, "can't pipe");
+		p_exiting(data, "can't pipe");
 	data->pid[data->c - 2] = fork();
 	if (data->pid[data->c - 2] == 0)
 	{
