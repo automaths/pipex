@@ -40,38 +40,21 @@ int	main(int argc, char **argv, char **envp)
 		return (ft_printf("incorrect arguments"), 0);
 	struct_init(&dd, argc, argv, envp);
 
-	dd.c = 2;
-	// parse_arguments(&dd);
-	// freeing_path_and_argz(&dd);
-	
-	
-	// get_the_path(&dd);
-	// if (!check_argz(&dd))
-	// 	return (freeing(&dd), 0);
 
+	dd.c = 2;
 	if (first_command(&dd) == 0)
 		return (0);
-	// freeing_argz(&dd);
+	freeing_path_and_argz(&dd);
 	if (last_command(&dd) == 0)
-		return (0);	
-	// freeing_path_and_argz(&dd);
+		return (0);
+
+	waitpid(dd.pid_one, 0, 0);
+	waitpid(dd.pid_two, 0, 0);
+
+	freeing_path_and_argz(&dd);
 	if (outfiling(&dd) == 0)
 		return (0);
-	
-	
-	// ft_printf("\n%s\n", dd.path);
-	// int i;
-	// i = 0;
-	// ft_printf("\n%s\n", dd.path);
-	// ft_printf("\n%s\n", dd.argz[0]);
-	// while (dd.argz[i])
-	// {
-	// 	ft_printf("\n%s\n", dd.argz[i]);
-	// 	i++;
-	// }
-	// dd.c++;
-	// get_the_path(&dd);
 
-	// freeing(&dd);
+
 	return (0);
 }

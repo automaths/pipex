@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 05:55:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/08 05:07:49 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/08 05:53:28 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ bool	get_the_path(t_struct *dd)
 	while (dd->unix_paths[i] && find_path(dd, dd->unix_paths[i]) == 0)
 		i++;
 	if (dd->unix_paths[i] == NULL)
-		return (freeing_unix(dd), 0);
+		return (freeing_unix(dd), free(dd->command), 0);
 	return (freeing_unix(dd), 1);
 }
 
@@ -131,7 +131,6 @@ bool	parse_arguments(t_struct *dd)
 	if (dd->argz == NULL)
 		return (0);
 	dd->argz[0] = dd->command;
-	ft_printf("%s\n", dd->argz[0]);
 	j = 0;
 	while (++j <= i)
 		dd->argz[j] = tmp[j];
