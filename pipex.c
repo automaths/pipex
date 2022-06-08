@@ -51,13 +51,12 @@ int	main(int argc, char **argv, char **envp)
 
 	if (first_command(&dd) == 0)
 		return (0);
-
-
-
-	freeing_argz(&dd);	
-	last_command(&dd);
-	freeing_path_and_argz(&dd);
-	outfiling(&dd);
+	// freeing_argz(&dd);
+	if (last_command(&dd) == 0)
+		return (0);	
+	// freeing_path_and_argz(&dd);
+	if (outfiling(&dd) == 0)
+		return (0);
 	
 	
 	// ft_printf("\n%s\n", dd.path);

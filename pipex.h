@@ -53,9 +53,9 @@ typedef struct s_struct
 bool	get_the_path(t_struct *data);
 bool	find_path(t_struct *dd, char *unix_path);
 bool	command_trim(t_struct *data);
-int	parse_arguments(t_struct *data);
+bool	parse_arguments(t_struct *data);
 
-void	outfiling(t_struct *data);
+bool	outfiling(t_struct *data);
 void	freeing(t_struct *data);
 void	struct_init(t_struct *data, int argc, char **argv, char **envp);
 void	exiting(t_struct *data, const char *error);
@@ -64,7 +64,7 @@ char	*ft_strjoin_new(char *s1, char *s2, int flag);
 bool	first_command(t_struct *data);
 bool	last_command(t_struct *data);
 
-void	forking(t_struct *data, int fd_in, int fd_out);
+void	forking(t_struct *dd, int fd_in, int fd_out, int pid);
 
 bool	is_printable(char c);
 bool	is_whitespace(char c);

@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 05:55:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/08 04:38:52 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/08 05:07:49 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,14 +111,14 @@ bool	get_the_path(t_struct *dd)
 	return (freeing_unix(dd), 1);
 }
 
-int	parse_arguments(t_struct *dd)
+bool	parse_arguments(t_struct *dd)
 {
 	char	**tmp;
 	int		i;
 	int		j;
 
 	if (get_the_path(dd) == 0)
-		return (0);
+		return (ft_printf("command not found: %s", dd->argv[dd->c]), 0);
 	if (dd->path == NULL)
 		return (0);
 	i = 0;
@@ -138,8 +138,5 @@ int	parse_arguments(t_struct *dd)
 	dd->argz[j] = NULL;
 	free(tmp[0]);
 	free(tmp);
-	// freeing_argz(dd);
-	
-	
 	return (1);
 }

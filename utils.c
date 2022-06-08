@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 05:56:59 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/08 04:26:57 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/08 05:38:35 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,34 +25,41 @@ void	struct_init(t_struct *dd, int argc, char **argv, char **envp)
 	dd->unix_paths = NULL;
 	
 	dd->free_path = 0;
+	dd->pid_one = 0;
+	dd->pid_two = 0;
 }
 
-void	outfiling(t_struct *dd)
+void	ending_fd(t_struct *dd)
 {
-	if (access(dd->argv[dd->argc - 1], F_OK) == -1)
-		exiting(dd, "Outfile.txt");
+	close(dd->fd_outfile);
+	close(dd->fd_two[0]);	
+}
+
+bool	outfiling(t_struct *dd)
+{
 	if (access(dd->argv[dd->argc - 1], W_OK) == -1)
-		exiting(dd, "Outfile.txt");
+		return (close(dd->fd_two[0]), ft_printf("outfile wrong permissions"), 0);
 	dd->fd_outfile = open(dd->argv[dd->argc - 1], O_TRUNC | O_CREAT | O_RDWR);
 	if (dd->fd_outfile == -1)
-		exiting(dd, "Outfile.txt");
+		return (close(dd->fd_two[0]), ft_printf("can't open output file"), 0);
 	dd->output_buff = (char *)malloc(sizeof(char) * 4096);
 	if (dd->output_buff == NULL)
-		exiting(dd, "merror");
+		return (ending_fd(dd), ft_printf("can't malloc"), 0);
 	dd->count = read(dd->fd_two[0], dd->output_buff, 4096);
 	if (dd->count == -1)
-		exiting(dd, "can't read");
-	ft_printf("%s", dd->output_buff);
+		return (free(dd->output_buff), ending_fd(dd), ft_printf("can't read"), 0);
+
+	// if (dd->output_buff != NULL)
+	// 	ft_printf("%s", dd->output_buff);
+
 	if (dd->count != 0)
 	{
 		dd->output_buff[dd->count] = '\0';
 		dd->count_bis = write(dd->fd_outfile, dd->output_buff, dd->count);
 		if (dd->count_bis == -1)
-			exiting(dd, "Outfile can't write");
+			return (free(dd->output_buff), ending_fd(dd), ft_printf("outfile can't write"), 0);
 	}
-	close(dd->fd_outfile);
-	close(dd->fd_two[0]);
-	free(dd->output_buff);
+	return (free(dd->output_buff), ending_fd(dd), 1);
 }
 
 void	exiting(t_struct *dd, const char *error)
