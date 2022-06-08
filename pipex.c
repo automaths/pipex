@@ -22,9 +22,9 @@ bool check_arguments(char **argv)
 	return (1);
 }
 
-bool	check_argz(t_struct *data)
+bool	check_argz(t_struct *dd)
 {
-	data->buffer = NULL;
+	dd->buffer = NULL;
 	return (1);
 }
 
@@ -40,14 +40,24 @@ int	main(int argc, char **argv, char **envp)
 		return (ft_printf("incorrect arguments"), 0);
 	struct_init(&dd, argc, argv, envp);
 
-	// dd.c = 2;
+	dd.c = 2;
+	// parse_arguments(&dd);
+	// freeing_path_and_argz(&dd);
+	
+	
 	// get_the_path(&dd);
 	// if (!check_argz(&dd))
 	// 	return (freeing(&dd), 0);
 
-	first_command(&dd);
+	if (first_command(&dd) == 0)
+		return (0);
+
+
+
+	freeing_argz(&dd);	
 	last_command(&dd);
-	
+	freeing_path_and_argz(&dd);
+	outfiling(&dd);
 	
 	
 	// ft_printf("\n%s\n", dd.path);
@@ -63,6 +73,6 @@ int	main(int argc, char **argv, char **envp)
 	// dd.c++;
 	// get_the_path(&dd);
 
-	freeing(&dd);
+	// freeing(&dd);
 	return (0);
 }

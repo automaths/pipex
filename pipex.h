@@ -45,27 +45,35 @@ typedef struct s_struct
 	int		c;
 	int		i;
 	int		error;
+	
+	int		free_path;
 
 }	t_struct;
 
-void	get_the_path(t_struct *data);
-int		find_path(t_struct *data);
-void	command_trim(t_struct *data);
-int		parse_arguments(t_struct *data);
+bool	get_the_path(t_struct *data);
+bool	find_path(t_struct *dd, char *unix_path);
+bool	command_trim(t_struct *data);
+int	parse_arguments(t_struct *data);
 
 void	outfiling(t_struct *data);
 void	freeing(t_struct *data);
 void	struct_init(t_struct *data, int argc, char **argv, char **envp);
-void	p_exiting(t_struct *data, const char *error);
+void	exiting(t_struct *data, const char *error);
 char	*ft_strjoin_new(char *s1, char *s2, int flag);
 
-void	first_command(t_struct *data);
-void	last_command(t_struct *data);
+bool	first_command(t_struct *data);
+bool	last_command(t_struct *data);
 
-int		forking(t_struct *data, int fd_in, int fd_out);
+void	forking(t_struct *data, int fd_in, int fd_out);
 
 bool	is_printable(char c);
 bool	is_whitespace(char c);
 bool	is_lowercase(char c);
+
+void	freeing_unix(t_struct *dd);
+void	freeing_command(t_struct *dd);
+void	freeing_path(t_struct *dd);
+void	freeing_argz(t_struct *dd);
+void	freeing_path_and_argz(t_struct *dd);
 
 #endif

@@ -6,13 +6,47 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 05:55:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/08 01:22:35 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/08 04:38:52 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	command_trim(t_struct *dd)
+char	*ft_strjoin_new(char *s1, char *s2, int flag)
+{
+	char	*str;
+	int		i;
+	int		j;
+
+	if (s1 == NULL || s2 == NULL)
+	{
+		if (s2 == NULL && s1 && (flag == 1 || flag == 2))
+			free(s1);
+		if (s1 == NULL && s2 && flag == 2)
+			free(s2);
+		return (NULL);
+	}
+	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 1);
+	if (str == NULL)
+		return (free(s1), NULL);
+	i = -1;
+	while (s1[++i])
+		str[i] = s1[i];
+	j = -1;
+	while (s2[++j])
+	{
+		str[i] = s2[j];
+		i++;
+	}
+	str[i] = '\0';
+	if (flag == 1 || flag == 2)
+		free(s1);
+	if (flag == 2)
+		free(s2);
+	return (str);
+}
+
+bool	command_trim(t_struct *dd)
 {
 	int		i;
 	int		j;
@@ -24,10 +58,10 @@ void	command_trim(t_struct *dd)
 	while (is_lowercase(dd->argv[dd->c][i + j]))
 		j++;
 	if (j == 0)
-		return ;
+		return (0);
 	dd->command = (char *)malloc(sizeof(char) * (j + 1));
 	if (dd->command == NULL)
-		p_exiting(dd, "malloc error");
+		return (0);
 	j = 0;
 	while (is_lowercase(dd->argv[dd->c][i + j]))
 	{
@@ -35,38 +69,26 @@ void	command_trim(t_struct *dd)
 		j++;
 	}
 	dd->command[j] = '\0';
+	return (1);
 }
 
-void	free_unix(t_struct *dd)
+bool	find_path(t_struct *dd, char *unix_path)
 {
-	int i;
-	
-	i = 0;
-	if (dd->unix_paths != NULL)
-	{
-		while (dd->unix_paths[i])
-		{
-			free(dd->unix_paths[i]);
-			i++;
-		}
-		free(dd->unix_paths);
-	}
-}
-
-int	find_path(t_struct *dd)
-{;
 	char	add[1];
 
 	add[0] = '/';
-	dd->path = ft_strjoin_new(dd->unix_paths[dd->i], add, 0);
+	dd->path = ft_strjoin_new(unix_path, add, 0);
+	if (dd->path == NULL)
+		 return (0);
 	dd->path = ft_strjoin_new(dd->path, dd->command, 1);
+	if (dd->path == NULL)
+		 return (0);
 	if (access(dd->path, X_OK) == 0)
 		return (1);
-	free(dd->path);
-	return (0);
+	return (free(dd->path), 0);
 }
 
-void	get_the_path(t_struct *dd)
+bool	get_the_path(t_struct *dd)
 {
 	int i;
 	
@@ -74,43 +96,50 @@ void	get_the_path(t_struct *dd)
 	while (dd->envp[i] && ft_strncmp(dd->envp[i], "PATH=", 5) != 0)
 		i++;
 	if (dd->envp[i] == NULL)
-		return ;
+		return (0);
 	dd->unix_paths = ft_split(&dd->envp[i][4], ':');
 	if (dd->unix_paths == NULL)
-		return ;
+		return (0);
 	command_trim(dd);
 	if (dd->command == NULL)
-		return ;
-	dd->i = 0;
-	while (dd->unix_paths[dd->i] && find_path(dd) == 0)
-		dd->i++;
+		return (0);
+	i = 0;
+	while (dd->unix_paths[i] && find_path(dd, dd->unix_paths[i]) == 0)
+		i++;
+	if (dd->unix_paths[i] == NULL)
+		return (freeing_unix(dd), 0);
+	return (freeing_unix(dd), 1);
 }
 
-int	parse_arguments(t_struct *data)
+int	parse_arguments(t_struct *dd)
 {
 	char	**tmp;
 	int		i;
 	int		j;
 
-	get_the_path(data);
-	if (data->path == NULL)
+	if (get_the_path(dd) == 0)
+		return (0);
+	if (dd->path == NULL)
 		return (0);
 	i = 0;
-	tmp = ft_split(data->argv[data->c], ' ');
+	tmp = ft_split(dd->argv[dd->c], ' ');
 	while (tmp[i])
 		i++;
 	if (i == 0)
 		return (0);
-	data->argz = (char **)malloc(sizeof(char *) * (i + 2));
-	if (data->argz == NULL)
+	dd->argz = (char **)malloc(sizeof(char *) * (i + 2));
+	if (dd->argz == NULL)
 		return (0);
-	data->argz[0] = data->command;
-	ft_printf("%s\n", data->argz[0]);
+	dd->argz[0] = dd->command;
+	ft_printf("%s\n", dd->argz[0]);
 	j = 0;
 	while (++j <= i)
-		data->argz[j] = tmp[j];
-	data->argz[j] = NULL;
+		dd->argz[j] = tmp[j];
+	dd->argz[j] = NULL;
 	free(tmp[0]);
 	free(tmp);
+	// freeing_argz(dd);
+	
+	
 	return (1);
 }
