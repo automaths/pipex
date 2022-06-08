@@ -76,4 +76,6 @@ void	freeing_path(t_struct *dd);
 void	freeing_argz(t_struct *dd);
 void	freeing_path_and_argz(t_struct *dd);
 
+void	ending_fd(t_struct *dd);
+
 #endif

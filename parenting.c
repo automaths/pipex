@@ -51,3 +51,30 @@ void	forking(t_struct *dd, int fd_in, int fd_out, int pid)
 		close(fd_out);
 	}
 }
+
+bool	outfiling(t_struct *dd)
+{
+	if (access(dd->argv[dd->argc - 1], W_OK) == -1)
+		return (close(dd->fd_two[0]), ft_printf("outfile wrong permissions"), 0);
+	dd->fd_outfile = open(dd->argv[dd->argc - 1], O_TRUNC | O_CREAT | O_RDWR);
+	if (dd->fd_outfile == -1)
+		return (close(dd->fd_two[0]), ft_printf("can't open output file"), 0);
+	dd->output_buff = (char *)malloc(sizeof(char) * 4096);
+	if (dd->output_buff == NULL)
+		return (ending_fd(dd), ft_printf("can't malloc"), 0);
+	dd->count = read(dd->fd_two[0], dd->output_buff, 4096);
+	if (dd->count == -1)
+		return (free(dd->output_buff), ending_fd(dd), ft_printf("can't read"), 0);
+
+	// if (dd->output_buff != NULL)
+	// 	ft_printf("%s", dd->output_buff);
+
+	if (dd->count != 0)
+	{
+		dd->output_buff[dd->count] = '\0';
+		dd->count_bis = write(dd->fd_outfile, dd->output_buff, dd->count);
+		if (dd->count_bis == -1)
+			return (free(dd->output_buff), ending_fd(dd), ft_printf("outfile can't write"), 0);
+	}
+	return (free(dd->output_buff), ending_fd(dd), 1);
+}
