@@ -74,7 +74,7 @@ void	parse_arguments(t_struct *data)
 	while (tmp[i])
 		i++;
 	if (i == 0)
-		exiting(data, "wrong arguments");
+		exiting(data, "zsh: command not found: notexisting");
 	argz = (char **)malloc(sizeof(char *) * (i + 2));
 	if (argz == NULL)
 		exiting(data, "merror");

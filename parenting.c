@@ -58,7 +58,7 @@ bool	outfiling(t_struct *dd)
 		return (close(dd->fd_two[0]), ft_printf("outfile wrong permissions"), 0);
 	dd->fd_outfile = open(dd->argv[dd->argc - 1], O_TRUNC | O_CREAT | O_RDWR);
 	if (dd->fd_outfile == -1)
-		return (close(dd->fd_two[0]), ft_printf("can't open output file"), 0);
+		return (close(dd->fd_two[0]), /*ft_printf("can't open output file"), */0);
 	dd->output_buff = (char *)malloc(sizeof(char) * 4096);
 	if (dd->output_buff == NULL)
 		return (ending_fd(dd), ft_printf("can't malloc"), 0);
