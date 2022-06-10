@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 22:47:36 by nsartral          #+#    #+#             */
-/*   Updated: 2022/05/08 01:58:08 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/10 03:26:46 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdarg.h>
 
 void				ft_putchar(char c);
-int					ft_atoi(char *str);
+int					ft_atoi(const char *str);
 void				ft_putnbr(int n);
 size_t				ft_strlen(const char *str);
 void				ft_putnbr_hex_digits(int nbr);

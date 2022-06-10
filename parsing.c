@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 05:55:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/10 02:21:26 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/10 03:21:59 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ bool	parse_arguments(t_struct *dd)
 	int		j;
 
 	if (get_the_path(dd) == 0)
-		return (ft_printf("zsh: command not found: %s", dd->argv[dd->c]), 0);
+		return (ft_printf("command not found: %s", dd->argv[dd->c]), 0);
 	if (dd->path == NULL)
 		return (0);
 	i = 0;

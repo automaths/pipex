@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 01:53:50 by nsartral          #+#    #+#             */
-/*   Updated: 2022/05/08 01:53:53 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/10 03:26:40 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	ft_putnbr(int n)
 	write (1, &c, 1);
 }
 
-int	ft_atoi(char *str)
+int	ft_atoi(const char *str)
 {
 	int	i;
 	int	x;

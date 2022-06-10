@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 02:12:35 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/10 02:13:14 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/10 03:25:44 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <stdbool.h>
-# include "./incs/ft_printf.h"
-# include "./incs/libft.h"
+# include "./ft_printf/ft_printf.h"
+# include "./libft/libft.h"
 # include "errno.h"
 //valgrind --leak-check=full --show-leak-kinds=all 
 //--trace-children=yes --track-fds=yes ./pipex
