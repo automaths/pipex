@@ -1,35 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gadgets.c                                          :+:      :+:    :+:   */
+/*   attributes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/10 02:07:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/10 02:07:08 by nsartral         ###   ########.fr       */
+/*   Created: 2022/05/08 01:53:00 by nsartral          #+#    #+#             */
+/*   Updated: 2022/05/08 01:53:04 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "ft_printf.h"
 
-bool	is_printable(char c)
+int	ft_isdigit(int c)
 {
-	if (c >= 32 && c <= 126)
+	if ((c >= 48 && c <= 57))
 		return (1);
 	return (0);
 }
 
-bool	is_whitespace(char c)
+int	is_specifications(char c)
 {
-	if (c == ' ' && c == '\t' && c == '\v'
-		&& c == '\n' && c == '\r' && c == '\f')
+	if (c == '-' || c == '0' || ft_isdigit(c))
 		return (1);
 	return (0);
 }
 
-bool	is_lowercase(char c)
+int	is_conversion(char c)
 {
-	if (c >= 'a' && c <= 'z')
+	if (c == 'c' || c == 's' || c == 'p' || c == 'd' || c == 'i'
+		|| c == 'u' || c == 'x' || c == 'X')
+		return (1);
+	return (0);
+}
+
+int	is_flag(char c)
+{
+	if (c == '-' || c == '0')
 		return (1);
 	return (0);
 }

@@ -1,35 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gadgets.c                                          :+:      :+:    :+:   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/10 02:07:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/10 02:07:08 by nsartral         ###   ########.fr       */
+/*   Created: 2022/05/05 15:20:57 by nsartral          #+#    #+#             */
+/*   Updated: 2022/05/05 15:21:00 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "libft.h"
 
-bool	is_printable(char c)
+int	ft_strlcat(char *dest, const char *src, size_t size)
 {
-	if (c >= 32 && c <= 126)
-		return (1);
-	return (0);
-}
+	size_t	i;
+	size_t	n;
+	size_t	m;
 
-bool	is_whitespace(char c)
-{
-	if (c == ' ' && c == '\t' && c == '\v'
-		&& c == '\n' && c == '\r' && c == '\f')
-		return (1);
-	return (0);
-}
-
-bool	is_lowercase(char c)
-{
-	if (c >= 'a' && c <= 'z')
-		return (1);
-	return (0);
+	n = ft_strlen(dest);
+	m = ft_strlen(src);
+	if (size <= n)
+		return (m + size);
+	i = 0;
+	while (src[i] && n + i < size - 1)
+	{
+		dest[n + i] = src[i];
+		i++;
+	}
+	dest[n + i] = '\0';
+	return (n + m);
 }

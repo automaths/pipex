@@ -1,35 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gadgets.c                                          :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/10 02:07:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/10 02:07:08 by nsartral         ###   ########.fr       */
+/*   Created: 2022/05/05 15:22:22 by nsartral          #+#    #+#             */
+/*   Updated: 2022/05/05 15:22:24 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "libft.h"
 
-bool	is_printable(char c)
+void	*ft_memchr(const void *s, int c, size_t n)
 {
-	if (c >= 32 && c <= 126)
-		return (1);
-	return (0);
-}
+	size_t			i;
+	unsigned char	*str;
+	unsigned char	let;
 
-bool	is_whitespace(char c)
-{
-	if (c == ' ' && c == '\t' && c == '\v'
-		&& c == '\n' && c == '\r' && c == '\f')
-		return (1);
-	return (0);
-}
-
-bool	is_lowercase(char c)
-{
-	if (c >= 'a' && c <= 'z')
-		return (1);
-	return (0);
+	str = (unsigned char *)s;
+	let = (unsigned char)c;
+	i = 0;
+	while (i < n)
+	{
+		if (str[i] == let)
+			return ((void *)(s + i));
+		i++;
+	}
+	return (NULL);
 }

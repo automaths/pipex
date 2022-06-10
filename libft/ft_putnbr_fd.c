@@ -1,35 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gadgets.c                                          :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/10 02:07:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/10 02:07:08 by nsartral         ###   ########.fr       */
+/*   Created: 2022/05/05 15:21:41 by nsartral          #+#    #+#             */
+/*   Updated: 2022/05/05 15:21:44 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "libft.h"
 
-bool	is_printable(char c)
+void	ft_putnbr_fd(int n, int fd)
 {
-	if (c >= 32 && c <= 126)
-		return (1);
-	return (0);
-}
+	char	c;
 
-bool	is_whitespace(char c)
-{
-	if (c == ' ' && c == '\t' && c == '\v'
-		&& c == '\n' && c == '\r' && c == '\f')
-		return (1);
-	return (0);
-}
-
-bool	is_lowercase(char c)
-{
-	if (c >= 'a' && c <= 'z')
-		return (1);
-	return (0);
+	if (n == -2147483648)
+	{
+		write (fd, "-2147483648", 11);
+		return ;
+	}
+	if (n == 0)
+	{
+		write (fd, "0", 1);
+		return ;
+	}
+	if (n < 0)
+	{
+		write (fd, "-", 1);
+		n *= -1;
+	}
+	if (n > 9)
+		ft_putnbr_fd(n / 10, fd);
+	c = n % 10 + '0';
+	write (fd, &c, 1);
 }

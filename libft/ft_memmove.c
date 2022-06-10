@@ -1,35 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gadgets.c                                          :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/10 02:07:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/10 02:07:08 by nsartral         ###   ########.fr       */
+/*   Created: 2022/05/05 15:22:05 by nsartral          #+#    #+#             */
+/*   Updated: 2022/05/05 15:22:07 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "libft.h"
 
-bool	is_printable(char c)
+void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-	if (c >= 32 && c <= 126)
-		return (1);
-	return (0);
-}
+	char	*d;
+	char	*s;
 
-bool	is_whitespace(char c)
-{
-	if (c == ' ' && c == '\t' && c == '\v'
-		&& c == '\n' && c == '\r' && c == '\f')
-		return (1);
-	return (0);
-}
-
-bool	is_lowercase(char c)
-{
-	if (c >= 'a' && c <= 'z')
-		return (1);
-	return (0);
+	d = (char *)dest;
+	s = (char *)src;
+	if (dest == NULL && src == NULL)
+		return (NULL);
+	if (dest < src)
+		ft_memcpy(dest, src, n);
+	else
+	{
+		s += (n - 1);
+		d += (n - 1);
+		while (n > 0)
+		{
+			*d = *s;
+			d--;
+			s--;
+			n--;
+		}
+	}
+	return (dest);
 }

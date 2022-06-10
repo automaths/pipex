@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   freeing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/10 02:03:42 by nsartral          #+#    #+#             */
+/*   Updated: 2022/06/10 02:04:10 by nsartral         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 
 void	freeing_unix(t_struct *dd)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (dd->unix_paths[++i])
@@ -25,8 +37,8 @@ void	freeing_path(t_struct *dd)
 
 void	freeing_argz(t_struct *dd)
 {
-	int i;
-	
+	int	i;
+
 	i = -1;
 	while (dd->argz[++i])
 		free(dd->argz[i]);

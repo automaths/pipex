@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 05:55:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/08 06:50:57 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/10 02:21:26 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,8 @@ char	*ft_strjoin_new(char *s1, char *s2, int flag)
 	int		i;
 	int		j;
 
-	if (s1 == NULL || s2 == NULL)
-	{
-		if (s2 == NULL && s1 && (flag == 1 || flag == 2))
-			free(s1);
-		if (s1 == NULL && s2 && flag == 2)
-			free(s2);
+	if (s1 == NULL && s2 == NULL)
 		return (NULL);
-	}
 	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 1);
 	if (str == NULL)
 		return (free(s1), NULL);
@@ -34,10 +28,7 @@ char	*ft_strjoin_new(char *s1, char *s2, int flag)
 		str[i] = s1[i];
 	j = -1;
 	while (s2[++j])
-	{
-		str[i] = s2[j];
-		i++;
-	}
+		str[i++] = s2[j];
 	str[i] = '\0';
 	if (flag == 1 || flag == 2)
 		free(s1);
@@ -79,10 +70,10 @@ bool	find_path(t_struct *dd, char *unix_path)
 	add[0] = '/';
 	dd->path = ft_strjoin_new(unix_path, add, 0);
 	if (dd->path == NULL)
-		 return (0);
+		return (0);
 	dd->path = ft_strjoin_new(dd->path, dd->command, 1);
 	if (dd->path == NULL)
-		 return (0);
+		return (0);
 	if (access(dd->path, X_OK) == 0)
 		return (1);
 	return (free(dd->path), 0);
@@ -90,8 +81,8 @@ bool	find_path(t_struct *dd, char *unix_path)
 
 bool	get_the_path(t_struct *dd)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	while (dd->envp[i] && ft_strncmp(dd->envp[i], "PATH=", 5) != 0)
 		i++;
@@ -100,7 +91,8 @@ bool	get_the_path(t_struct *dd)
 	dd->unix_paths = ft_split(&dd->envp[i][4], ':');
 	if (dd->unix_paths == NULL)
 		return (0);
-	command_trim(dd);
+	if (command_trim(dd) == 0)
+		return (freeing_unix(dd), 0);
 	if (dd->command == NULL)
 		return (0);
 	i = 0;
