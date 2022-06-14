@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 05:56:59 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/14 16:54:51 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 18:08:40 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,52 @@ void	struct_init(t_struct *dd, int argc, char **argv, char **envp)
 	dd->command = NULL;
 	dd->unix_paths = NULL;
 	dd->free_path = 0;
-	dd->pid_one = 0;
-	dd->pid_two = 0;
 }
 
-void	ending_fd(t_struct *dd)
+bool	check_writable(char **argv)
 {
-	close(dd->fd_outfile);
-	close(dd->fd_two[0]);
+	int	i;
+	int	j;
+
+	i = 0;
+	while (argv[i])
+	{
+		j = 0;
+		while (argv[i][j])
+		{
+			if (argv[i][j] < 32 || argv[i][j] > 126)
+				return (0);
+			j++;
+		}
+		i++;
+	}
+	return (1);
 }
 
-void	exiting(const char *error)
+bool	check_arguments_bonus(int argc, char **argv, char **envp)
 {
-	perror(error);
-	exit(1);
+	if (envp[0] == NULL)
+		return (ft_printf("no environment"), 0);
+	if (argc < 5)
+		return (ft_printf("too few arguments"), 0);
+	if ((ft_strncmp(argv[1], "/dev/urandom", 12) == 0)
+		|| (ft_strncmp(argv[1], "/dev/random", 11) == 0))
+		return (0);
+	if (check_writable(argv) == 0)
+		return (ft_printf("incorrect arguments"), 0);
+	return (1);
+}
+
+bool	check_arguments(int argc, char **argv, char **envp)
+{
+	if (envp[0] == NULL)
+		return (ft_printf("no environment"), 0);
+	if (argc != 5)
+		return (ft_printf("wrong_arguments"), 0);
+	if ((ft_strncmp(argv[1], "/dev/urandom", 12) == 0)
+		|| (ft_strncmp(argv[1], "/dev/random", 11) == 0))
+		return (0);
+	if (check_writable(argv) == 0)
+		return (ft_printf("incorrect arguments"), 0);
+	return (1);
 }

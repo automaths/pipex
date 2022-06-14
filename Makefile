@@ -1,23 +1,26 @@
 SRCS			=	./pipex.c \
 					./parsing.c \
 					./utils.c \
+					./utils_bis.c \
+					./utils_ter.c \
 					./parenting.c \
-					./gadgets.c \
-					./freeing.c
+					./freeing.c \
+					./here_doc.c \
 					
 SRCS_BONUS		=	./pipex_bonus.c \
 					./parsing.c \
 					./utils.c \
+					./utils_bis.c \
+					./utils_ter.c \
 					./parenting.c \
-					./gadgets.c \
 					./freeing.c \
-					./here_doc.c
+					./here_doc.c \
 
 OBJS			= 	$(SRCS:.c=.o)
 
 OBJS_BONUS		= 	$(SRCS_BONUS:.c=.o)
 
-LIBS			= 	-L ./ft_printf -lftprintf -L ./libft -lft
+LIBS			= 	./libft.a ./libftprintf.a
 
 CC				= 	gcc
 RM				= 	rm -f
@@ -28,17 +31,16 @@ NAME			= 	pipex
 all:			$(NAME)
 
 $(NAME):		$(OBJS)
-				@make -C ./ft_printf
-				@make -C ./libft
 				gcc $(CFLAGS) -g3 -o $(NAME) $(OBJS) $(LIBS)
-				
+				$(RM) $(OBJS)
+			
 bonus:			$(OBJS_BONUS)
-				@make -C ./ft_printf
-				@make -C ./libft
 				gcc $(CFLAGS) -g3 -o $(NAME) $(OBJS_BONUS) $(LIBS)
+				$(RM) $(OBJS_BONUS)
 
 clean:
 				$(RM) $(OBJS)
+				$(RM) $(OBJS_BONUS)
 
 fclean:			clean
 				$(RM) $(NAME) $(OBJS)

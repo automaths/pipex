@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 02:09:40 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/14 16:54:39 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 17:57:30 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,58 +27,51 @@ bool	first_command(t_struct *dd)
 	if (dd->fd_infile == -1)
 		return (freeing_path_and_argz(dd),
 			ft_printf("can't open input file"), 0);
-	if (pipe(dd->fd_one) == -1)
+	if (pipe(dd->fd[dd->c]) == -1)
 		return (ft_printf("can't open pipe"), 0);
-	forking(dd, dd->fd_infile, dd->fd_one[1], dd->pid_one);
+	forking(dd, dd->fd_infile, dd->fd[dd->c][1], dd->pid[dd->c]);
 	return (1);
 }
 
 bool	last_command(t_struct *dd)
 {
-	dd->c = 3;
+	dd->c = dd->argc - 2;
 	if (parse_arguments(dd) == 0)
 		return (0);
-	if (pipe(dd->fd_two) == -1)
+	if (pipe(dd->fd[dd->c]) == -1)
 		return (ft_printf("can't open pipe"), 0);
-	forking(dd, dd->fd_one[0], dd->fd_two[1], dd->pid_two);
+	forking(dd, dd->fd[dd->c - 1][0], dd->fd[dd->c][1], dd->pid[dd->c]);
 	return (1);
 }
 
-void	forking(t_struct *dd, int fd_in, int fd_out, int pid)
+bool	looping_commands(t_struct *dd)
 {
-	pid = fork();
-	if (pid == -1)
-		exiting("can't fork");
-	if (pid == 0)
+	dd->c++;
+	while (dd->c < dd->argc - 2)
 	{
-		if (dup2(fd_in, STDIN_FILENO) == -1)
-			exiting(dd->argz[0]);
-		if (dup2(fd_out, STDOUT_FILENO) == -1)
-			exiting(dd->argz[0]);
-		close(fd_in);
-		close(fd_out);
-		if (execve(dd->path, dd->argz, dd->envp) == -1)
-			exiting(dd->argz[0]);
+		if (parse_arguments(dd) == 0)
+			return (0);
+		if (pipe(dd->fd[dd->c]) == -1)
+			return (freeing_path_and_argz(dd), ft_printf("can't open pipe"), 0);
+		forking(dd, dd->fd[dd->c - 1][0], dd->fd[dd->c][1], dd->pid[dd->c]);
+		freeing_path_and_argz(dd);
+		dd->c++;
 	}
-	else
-	{
-		close(fd_in);
-		close(fd_out);
-	}
+	return (1);
 }
 
 bool	outfiling(t_struct *dd)
 {
 	if (access(dd->argv[dd->argc - 1], W_OK) == -1)
-		return (close(dd->fd_two[0]),
+		return (close(dd->fd[dd->c][0]),
 			ft_printf("outfile wrong permissions"), 0);
 	dd->fd_outfile = open(dd->argv[dd->argc - 1], O_TRUNC | O_CREAT | O_RDWR);
 	if (dd->fd_outfile == -1)
-		return (close(dd->fd_two[0]), 0);
+		return (close(dd->fd[dd->c][0]), 0);
 	dd->output_buff = (char *)malloc(sizeof(char) * 4096);
 	if (dd->output_buff == NULL)
 		return (ending_fd(dd), ft_printf("can't malloc"), 0);
-	dd->count = read(dd->fd_two[0], dd->output_buff, 4096);
+	dd->count = read(dd->fd[dd->c][0], dd->output_buff, 4096);
 	if (dd->count == -1)
 		return (free(dd->output_buff), ending_fd(dd),
 			ft_printf("can't read"), 0);
