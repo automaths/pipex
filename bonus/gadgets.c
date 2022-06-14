@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 02:07:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/14 09:09:56 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 12:37:53 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ bool	is_lowercase(char c)
 	return (0);
 }
 
-int		ft_strlen_bis(char *str)
+size_t		ft_strlen_bis(char *str)
 {
 	int i;
 	

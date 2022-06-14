@@ -1,43 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/06 05:56:59 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/14 11:10:36 by nsartral         ###   ########.fr       */
+/*   Created: 2022/06/10 02:08:02 by nsartral          #+#    #+#             */
+/*   Updated: 2022/06/14 16:47:37 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-void	struct_init(t_struct *dd, int argc, char **argv, char **envp)
-{
-	
-	dd->envp = envp;
-	dd->argv = argv;
-	dd->argc = argc;
-	dd->command = NULL;
-	dd->argz = NULL;
-	dd->buffer = NULL;
-	dd->path = NULL;
-	dd->command = NULL;
-	dd->unix_paths = NULL;
-	dd->free_path = 0;
-}
-
-void	ending_fd(t_struct *dd)
-{
-	close(dd->fd_outfile);
-	close(dd->fd[1][0]);
-}
-
-void	exiting(const char *error)
-{
-	perror(error);
-	exit(1);
-}
 
 bool	check_writable(char **argv)
 {
@@ -61,7 +34,7 @@ bool	check_writable(char **argv)
 	return (1);
 }
 
-bool	check_arguments(int argc, char **argv, char **envp)
+bool	check_arguments_bonus(int argc, char **argv, char **envp)
 {
 	if (envp[0] == NULL)
 		return (ft_printf("no environment"), 0);
@@ -73,4 +46,37 @@ bool	check_arguments(int argc, char **argv, char **envp)
 	if (check_writable(argv) == 0)
 		return (ft_printf("incorrect arguments"), 0);
 	return (1);	
+}
+
+int	main(int argc, char **argv, char **envp)
+{	
+	t_struct	dd;
+	struct_init(&dd, argc, argv, envp);
+
+	if (check_arguments_bonus(argc, argv, envp) == 0)
+		return (0);
+
+	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+		return (here_docking(&dd), 0);
+		
+	if (first_command(&dd) == 0)
+		return (0);
+	freeing_path_and_argz(&dd);
+
+	if (looping_commands(&dd) == 0)
+		return (0);
+
+	if (last_command(&dd) == 0)
+		return (0);
+		
+	//SOCCUPER DES WAITPIDS
+	// waitpid(dd.pid[0], 0, 0);
+	// waitpid(dd.pid[1], 0, 0);
+
+	freeing_path_and_argz(&dd);
+
+	if (outfiling(&dd) == 0)
+		return (0);
+
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 02:12:35 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/14 10:33:28 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 16:38:14 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <stdbool.h>
 # include "../ft_printf/ft_printf.h"
 # include "../libft/libft.h"
+# include "./get_next_line/get_next_line.h"
 # include "errno.h"
 //valgrind --leak-check=full --show-leak-kinds=all 
 //--trace-children=yes --track-fds=yes ./pipex
@@ -39,9 +40,15 @@ typedef struct s_struct
 	int		count_bis;
 	char	*output_buff;
 	
+	int		pid_hd_one;
+	int		pid_hd_two;
+	int		fd_hd_one[2];
+	int		fd_hd_two[2];
+	
 	int		pid[4096];
 	int		fd[4096][2];
 	
+	int		fd_tmp;
 	
 	int		fd_infile;
 	int		fd_outfile;
@@ -75,8 +82,17 @@ void	freeing_path(t_struct *dd);
 void	freeing_argz(t_struct *dd);
 void	freeing_path_and_argz(t_struct *dd);
 void	ending_fd(t_struct *dd);
-int		ft_strlen_bis(char *str);
+size_t	ft_strlen_bis(char *str);
+
+bool	check_arguments(int argc, char **argv, char **envp);
+bool	check_writable(char **argv);
 
 bool	looping_commands(t_struct *dd);
+
+void	here_docking(t_struct *dd);
+bool	first_command_hd(t_struct *dd);
+bool	last_command_hd(t_struct *dd);
+
+bool	outfiling_hd(t_struct *dd);
 
 #endif

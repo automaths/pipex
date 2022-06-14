@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 01:53:40 by nsartral          #+#    #+#             */
-/*   Updated: 2022/05/08 01:53:45 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 12:43:51 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ unsigned int	ft_putnbr_base_len(long long int nbr, char *base)
 
 	nb = (unsigned long long int)nbr;
 	t = 0;
-	n = ft_strlen(base);
+	n = ft_strlen_printf(base);
 	while (nb >= n)
 	{
 		nb /= n;

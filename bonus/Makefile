@@ -3,7 +3,10 @@ SRCS			=	./pipex.c \
 					./utils.c \
 					./parenting.c \
 					./gadgets.c \
-					./freeing.c
+					./freeing.c \
+					./get_next_line/get_next_line.c \
+					./get_next_line/get_next_line_utils.c \
+					./here_doc.c
 
 OBJS			= 	$(SRCS:.c=.o)
 

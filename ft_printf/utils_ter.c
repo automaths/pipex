@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 01:53:58 by nsartral          #+#    #+#             */
-/*   Updated: 2022/05/08 01:54:01 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 12:43:45 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_putnbr_base(long long int nbr, char *base)
 	unsigned long long int	nb;
 
 	nb = (unsigned long long)nbr;
-	n = ft_strlen(base);
+	n = ft_strlen_printf(base);
 	if (nb > (n - 1))
 		ft_putnbr_base(nb / n, base);
 	write(1, &base[nb % n], 1);
