@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 05:56:59 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/14 09:09:51 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 09:45:39 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	struct_init(t_struct *dd, int argc, char **argv, char **envp)
 {
+	
 	dd->envp = envp;
 	dd->argv = argv;
 	dd->argc = argc;
@@ -24,14 +25,12 @@ void	struct_init(t_struct *dd, int argc, char **argv, char **envp)
 	dd->command = NULL;
 	dd->unix_paths = NULL;
 	dd->free_path = 0;
-	dd->pid_one = 0;
-	dd->pid_two = 0;
 }
 
 void	ending_fd(t_struct *dd)
 {
 	close(dd->fd_outfile);
-	close(dd->fd_two[0]);
+	close(dd->fd[1][0]);
 }
 
 void	exiting(const char *error)

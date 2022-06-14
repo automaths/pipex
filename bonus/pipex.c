@@ -6,11 +6,12 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 02:08:02 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/14 09:22:29 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 09:50:24 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+#include <stdio.h>
 
 bool	check_writable(char **argv)
 {
@@ -44,12 +45,16 @@ bool	check_arguments(int argc, char **argv, char **envp)
 		|| (ft_strncmp(argv[1], "/dev/random", 11) == 0))
 		return (0);
 	if (check_writable(argv) == 0)
-		return (ft_printf("incorrect arguments"), 0);	
+		return (ft_printf("incorrect arguments"), 0);
+	return (1);	
 }
 
 int	main(int argc, char **argv, char **envp)
 {	
 	t_struct	dd;
+	// (void)argc;
+	// (void)argv;
+	// (void)envp;
 	if (check_arguments(argc, argv, envp) == 0)
 		return (0);
 	struct_init(&dd, argc, argv, envp);
@@ -57,13 +62,13 @@ int	main(int argc, char **argv, char **envp)
 		return (0);
 	freeing_path_and_argz(&dd);
 
-	if (looping_commands(&dd) == 0)
-		return (0);
+	// if (looping_commands(&dd) == 0)
+	// 	return (0);
 
 	if (last_command(&dd) == 0)
 		return (0);
-	waitpid(dd.pid_one, 0, 0);
-	waitpid(dd.pid_two, 0, 0);
+	waitpid(dd.pid[0], 0, 0);
+	waitpid(dd.pid[1], 0, 0);
 	freeing_path_and_argz(&dd);
 
 	if (outfiling(&dd) == 0)

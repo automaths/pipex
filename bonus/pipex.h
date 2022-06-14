@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 02:12:35 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/14 09:18:38 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 09:45:26 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,11 @@ typedef struct s_struct
 	int		count;
 	int		count_bis;
 	char	*output_buff;
-	int		pid_one;
-	int		pid_two;
-	int		fd_one[2];
-	int		fd_two[2];
+	
+	int		pid[4096];
+	int		fd[4096][2];
+	
+	
 	int		fd_infile;
 	int		fd_outfile;
 	int		c;
