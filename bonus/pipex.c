@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 02:08:02 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/14 09:50:24 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 10:33:13 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ int	main(int argc, char **argv, char **envp)
 		return (0);
 	freeing_path_and_argz(&dd);
 
-	// if (looping_commands(&dd) == 0)
-	// 	return (0);
+	if (looping_commands(&dd) == 0)
+		return (0);
 
 	if (last_command(&dd) == 0)
 		return (0);

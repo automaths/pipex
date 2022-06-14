@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 02:09:40 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/14 09:53:21 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 10:35:13 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ bool	first_command(t_struct *dd)
 	if (dd->fd_infile == -1)
 		return (freeing_path_and_argz(dd),
 			ft_printf("can't open input file"), 0);
-	if (pipe(dd->fd[dd->argc]) == -1)
+	if (pipe(dd->fd[dd->c]) == -1)
 		return (ft_printf("can't open pipe"), 0);
-	forking(dd, dd->fd_infile, dd->fd[dd->argc][1], dd->pid[0]);
+	forking(dd, dd->fd_infile, dd->fd[dd->c][1], dd->pid[dd->c]);
 	return (1);
 }
 
@@ -40,25 +40,25 @@ bool	last_command(t_struct *dd)
 		return (0);
 	if (pipe(dd->fd[dd->c]) == -1)
 		return (ft_printf("can't open pipe"), 0);
-	forking(dd, dd->fd[dd->argc][0], dd->fd[dd->c][1], dd->pid[1]);
+	forking(dd, dd->fd[dd->c - 1][0], dd->fd[dd->c][1], dd->pid[dd->c]);
 	return (1);
 }
 
-// bool	looping_commands(t_struct *dd)
-// {
-// 	dd->c++;
-// 	while (dd->c < dd->argc - 2)
-// 	{
-// 		if (parse_arguments(dd) == 0)
-// 			return (0);
-// 		if (pipe(dd->fd[dd->argc]) == -1)
-// 			return (ft_printf("can't open pipe"), 0);
-// 		forking(dd, dd->fd_infile, dd->fd[dd->argc][1], dd->pid[0]);
-// 		freeing_path_and_argz(dd);
-// 		dd->c++;
-// 	}
-// 	return (1);
-// }
+bool	looping_commands(t_struct *dd)
+{
+	dd->c++;
+	while (dd->c < dd->argc - 2)
+	{
+		if (parse_arguments(dd) == 0)
+			return (0);
+		if (pipe(dd->fd[dd->c]) == -1)
+			return (ft_printf("can't open pipe"), 0);
+		forking(dd, dd->fd[dd->c - 1][0], dd->fd[dd->c][1], dd->pid[dd->c]);
+		freeing_path_and_argz(dd);
+		dd->c++;
+	}
+	return (1);
+}
 
 void	forking(t_struct *dd, int fd_in, int fd_out, int pid)
 {

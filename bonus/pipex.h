@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 02:12:35 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/14 09:45:26 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 10:33:28 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,7 @@ void	freeing_argz(t_struct *dd);
 void	freeing_path_and_argz(t_struct *dd);
 void	ending_fd(t_struct *dd);
 int		ft_strlen_bis(char *str);
+
+bool	looping_commands(t_struct *dd);
 
 #endif
