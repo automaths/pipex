@@ -7,7 +7,7 @@ SRCS			=	./pipex.c \
 
 OBJS			= 	$(SRCS:.c=.o)
 
-LIBS			= 	-L ./ft_printf -lftprintf -L ./libft -lft
+LIBS			= 	./libft.a ./libftprintf.a
 
 CC				= 	gcc
 RM				= 	rm -f
@@ -18,9 +18,8 @@ NAME			= 	pipex
 all:			$(NAME)
 
 $(NAME):		$(OBJS)
-				@make -C ./ft_printf
-				@make -C ./libft
 				gcc $(CFLAGS) -g3 -o $(NAME) $(OBJS) $(LIBS)
+				$(RM) $(OBJS)
 
 clean:
 				$(RM) $(OBJS)

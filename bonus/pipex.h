@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 02:12:35 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/10 03:25:44 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 09:18:38 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <stdbool.h>
-# include "./ft_printf/ft_printf.h"
-# include "./libft/libft.h"
+# include "../ft_printf/ft_printf.h"
+# include "../libft/libft.h"
 # include "errno.h"
 //valgrind --leak-check=full --show-leak-kinds=all 
 //--trace-children=yes --track-fds=yes ./pipex
@@ -51,15 +51,17 @@ typedef struct s_struct
 
 }	t_struct;
 
+//PARSING
+char	*ft_strjoin_new(char *s1, char *s2, int flag);
 bool	get_the_path(t_struct *data);
 bool	find_path(t_struct *dd, char *unix_path);
 bool	command_trim(t_struct *data);
 bool	parse_arguments(t_struct *data);
+
 bool	outfiling(t_struct *data);
 void	freeing(t_struct *data);
 void	struct_init(t_struct *data, int argc, char **argv, char **envp);
 void	exiting(const char *error);
-char	*ft_strjoin_new(char *s1, char *s2, int flag);
 bool	first_command(t_struct *data);
 bool	last_command(t_struct *data);
 void	forking(t_struct *dd, int fd_in, int fd_out, int pid);
@@ -72,5 +74,6 @@ void	freeing_path(t_struct *dd);
 void	freeing_argz(t_struct *dd);
 void	freeing_path_and_argz(t_struct *dd);
 void	ending_fd(t_struct *dd);
+int		ft_strlen_bis(char *str);
 
 #endif

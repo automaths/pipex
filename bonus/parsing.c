@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 05:55:07 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/10 03:21:59 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 09:06:32 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_strjoin_new(char *s1, char *s2, int flag)
 
 	if (s1 == NULL && s2 == NULL)
 		return (NULL);
-	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 1);
+	str = malloc(sizeof(char) * (ft_strlen_bis(s1) + ft_strlen_bis(s2)) + 1);
 	if (str == NULL)
 		return (free(s1), NULL);
 	i = -1;

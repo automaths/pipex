@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 02:09:40 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/10 02:09:41 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 09:23:19 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,21 @@ bool	first_command(t_struct *dd)
 
 bool	last_command(t_struct *dd)
 {
-	dd->c = 3;
+	dd->c = dd->argc - 2;
 	if (parse_arguments(dd) == 0)
 		return (0);
 	if (pipe(dd->fd_two) == -1)
 		return (ft_printf("can't open pipe"), 0);
 	forking(dd, dd->fd_one[0], dd->fd_two[1], dd->pid_two);
 	return (1);
+}
+
+bool	looping_commands(t_struct *dd)
+{
+	while (dd->c < dd->argc - 2)
+	{
+		
+	}
 }
 
 void	forking(t_struct *dd, int fd_in, int fd_out, int pid)
