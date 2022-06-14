@@ -20,7 +20,7 @@ OBJS			= 	$(SRCS:.c=.o)
 
 OBJS_BONUS		= 	$(SRCS_BONUS:.c=.o)
 
-LIBS			= 	./libft.a ./libftprintf.a
+LIBS			= 	-L ./ft_printf -lftprintf -L ./libft -lft
 
 CC				= 	gcc
 RM				= 	rm -f
@@ -31,12 +31,14 @@ NAME			= 	pipex
 all:			$(NAME)
 
 $(NAME):		$(OBJS)
+				@make -C ./ft_printf
+				@make -C ./libft
 				gcc $(CFLAGS) -g3 -o $(NAME) $(OBJS) $(LIBS)
-				$(RM) $(OBJS)
 			
 bonus:			$(OBJS_BONUS)
+				@make -C ./ft_printf
+				@make -C ./libft
 				gcc $(CFLAGS) -g3 -o $(NAME) $(OBJS_BONUS) $(LIBS)
-				$(RM) $(OBJS_BONUS)
 
 clean:
 				$(RM) $(OBJS)

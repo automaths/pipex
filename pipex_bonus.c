@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 17:53:29 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/14 19:27:27 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 20:48:22 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int argc, char **argv, char **envp)
 {	
-	int i;
+	int			i;
 	t_struct	dd;
 
 	struct_init(&dd, argc, argv, envp);
@@ -31,7 +31,7 @@ int	main(int argc, char **argv, char **envp)
 		return (0);
 	i = 1;
 	while (++i < argc - 1)
-		waitpid(dd.pid[i], 0, 0);		
+		waitpid(dd.pid[i], 0, 0);
 	freeing_path_and_argz(&dd);
 	if (outfiling(&dd) == 0)
 		return (0);

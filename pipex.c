@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 02:08:02 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/14 18:09:36 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 20:48:00 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	main(int argc, char **argv, char **envp)
 {	
 	t_struct	dd;
-	
+
 	if (check_arguments(argc, argv, envp) == 0)
 		return (0);
 	struct_init(&dd, argc, argv, envp);

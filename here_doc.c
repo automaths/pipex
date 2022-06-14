@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 17:50:26 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/14 19:28:59 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/14 20:48:10 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,6 @@ bool	outfiling_hd(t_struct *dd)
 			return (free(dd->output_buff), ending_fd(dd),
 				ft_printf("outfile can't write"), 0);
 	}
-	return (free(dd->output_buff), close(dd->fd_outfile), close(dd->fd_hd_two[0]), 1);
+	return (free(dd->output_buff), close(dd->fd_outfile),
+		close(dd->fd_hd_two[0]), 1);
 }
