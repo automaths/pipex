@@ -6,7 +6,7 @@
 /*   By: nsartral <nsartral@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 02:12:35 by nsartral          #+#    #+#             */
-/*   Updated: 2022/06/14 19:26:47 by nsartral         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:04:56 by nsartral         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <stdbool.h>
-# include "../ft_printf/ft_printf.h"
-# include "../libft/libft.h"
+# include "./ft_printf/ft_printf.h"
+# include "./libft/libft.h"
 # include "errno.h"
 
 typedef struct s_struct
